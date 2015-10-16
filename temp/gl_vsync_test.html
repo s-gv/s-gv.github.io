@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>WebGL V-Sync Test</title>
+    </head>
+    <body>
+        <h1>WebGL V-Sync Test</h1>
+        <canvas id="glcanvas" width="1024" height="768"></canvas>
+        <script type="text/javascript">
+            var createShaderProgram = function(vertexShaderSource, fragmentShaderSource) {
+                var compileShader = function(shaderType, shaderSource) {
+                    var shader = gl.createShader(shaderType);
+                    gl.shaderSource(shader, shaderSource);
+                    gl.compileShader(shader);
+                    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                        console.log("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+                        return null;
+                    }
+                    return shader;
+                };
+                var vertexShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+                var fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+                var shaderProgram = gl.createProgram();
+                gl.attachShader(shaderProgram, vertexShader);
+                gl.attachShader(shaderProgram, fragmentShader);
+                gl.linkProgram(shaderProgram);
+
+                // If creating the shader program failed, alert
+                if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+                    console.log("Unable to initialize the shader program.");
+                }
+
+                return shaderProgram;
+            };
+
+            // Setup context
+            var canvas = document.getElementById("glcanvas");
+            var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+            // setup a GLSL program
+            var shaderProgram = createShaderProgram(
+                `
+                attribute vec2 a_position;
+                uniform vec2 u_offset;
+                void main() {
+                    gl_Position = vec4(u_offset + a_position, 0, 1);
+                }
+                `,
+                `
+                void main() {
+                    gl_FragColor = vec4(0,1,0,1);  // green
+                }
+                `
+            );
+            gl.useProgram(shaderProgram);
+
+            // look up where the vertex data needs to go.
+            var positionLocation = gl.getAttribLocation(shaderProgram, "a_position");
+            var offsetLocation = gl.getUniformLocation(shaderProgram, "u_offset");
+
+            // Create a buffer and put a single clipspace rectangle in
+            // it (2 triangles)
+            var buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(
+                gl.ARRAY_BUFFER,
+                new Float32Array([
+                    -0.15, -1.0,
+                     0.15, -1.0,
+                    -0.15,  1.0,
+                    -0.15,  1.0,
+                     0.15, -1.0,
+                     0.15,  1.0]),
+                gl.STATIC_DRAW);
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+            gl.uniform2f(offsetLocation, 0.5, 0);
+
+            var offset = 0.0;
+            var loop = function() {
+                // draw
+                gl.clearColor(0.0, 0.0, 0.0, 1.0);
+                gl.enable(gl.DEPTH_TEST);
+                gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+                gl.uniform2f(offsetLocation, offset, 0);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+                offset += 0.01;
+                if(offset > 1) {
+                    offset = -1;
+                }
+                window.requestAnimationFrame(loop);
+            }
+            loop();
+
+
+        </script>
+    </body>
+</html>
