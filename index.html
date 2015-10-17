@@ -11,15 +11,25 @@
         <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
         <style media="screen">
+            body {
+              padding-top: 20px;
+              padding-bottom: 20px;
+            }
+            .navbar {
+              margin-bottom: 20px;
+            }
             #myname {
                 font-size: 40px;
-            }
-            body {
-                margin-bottom: 100px;
             }
             .jumbotron {
                 padding-left: 10px;
                 padding-right: 10px;
+            }
+            /* Customize container */
+            @media (min-width: 768px) {
+                .container {
+                    max-width: 730px;
+                }
             }
         </style>
 
@@ -32,8 +42,8 @@
     </head>
     <body>
         <!-- Static navbar -->
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
+        <div class="container">
+            <nav class="navbar navbar-default">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
@@ -54,8 +64,9 @@
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
-            </div>
-        </nav>
+            </nav>
+        </div>
+
 
         <div class="container">
             <div class="row">
@@ -76,35 +87,22 @@
             <div class="row">
                 <div class="col-md-12">
                     <section id="research">
-                        <div class="page-header">
-                            <h2>Academic Research</h2>
-                        </div>
-                        <dl>
-                            <dt>Remote Neonatal Monitoring and Intervention</dt>
-                            <dd>
-                                The <a href="http://chips.ece.iisc.ernet.in/index.php/Wearables_for_Neonatal_Monitoring">Remote Neonatal Monitoring and Intervention Project</a> is a collaborative effort
-                                with <a href="http://www.sjri.res.in/">St. Johns Research Institute</a> that aims
-                                to improve infant mortality in rural India by remotely monitoring physiological parameters
-                                of newborns and initiating timely action when the sensed parameters are amiss.
-                                The circuitry that senses physiological parameters has to consume very little power
-                                because the battery powering the system is quite small. So, I designed a low-power
-                                oxygen saturation sensor interface circuit and a wearable low-power electrocardiograph. I also developed a <a href="https://rnicu-cloud.appspot.com/">web application</a> that
-                                collects sensor data and presents it to doctors. To aid building and debugging sensor
-                                interface circuits, I developed a <a href="https://github.com/s-gv/stream-plot">streaming data visualization tool</a>.
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>Minimizing energy consumption in sub-threshold digital circuits</dt>
-                            <dd>
-                                When performance isn't a concern, energy consumption of digital circuits can be reduced by
-                                lowering the supply voltage. However, at very low supply voltages, so much time is spent on
-                                computation that the leakage energy starts to dominate. So, it would be counter-productive to
-                                decrease the supply voltage beyond this Minimum Energy Point (MEP). I built an energy sensing
-                                circuit that senses how much energy the digital load circuit is consuming at a given supply
-                                voltage. This information can be used to select the optimal supply voltage during circuit
-                                operation.
-                            </dd>
-                        </dl>
+                        <h2>Academic Research</h2>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    <a href="http://chips.ece.iisc.ernet.in/index.php/Wearables_for_Neonatal_Monitoring">RNICU</a>
+                                    uses low-power sensors to remotely monitor physiological parameters of newborns in rural India.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6814884">All digital energy minimizer</a>
+                                    uses a fully synthesizable circuit that monitors energy consumption of
+                                    sub-threshold digital circuits to dynamically track the Minimum Energy Point (MEP).
+                                </td>
+                            </tr>
+                        </table>
                     </section>
                 </div>
             </div>
@@ -112,29 +110,29 @@
             <div class="row">
                 <div class="col-md-12">
                     <section id="publications">
-                        <div class="page-header">
-                            <h2>Publications</h2>
-                        </div>
-                        <dl>
-                            <dd>
-                                S. V. Gubbi and B. Amrutur, "<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6846367">Adaptive Pulse Width Control and Sampling for Low Power Pulse Oximetry</a>", IEEE Transactions on Biomedical Circuits and Systems.
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dd>
-                                S. V. Gubbi and B. Amrutur, "<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6814884">All Digital Energy Sensing for Minimum Energy Tracking</a>", IEEE Transactions on VLSI Systems.
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dd>
-                                 S. V. Gubbi and C. S. Seelamantula, "<a href="http://arxiv.org/abs/1412.2210">Risk estimation without using Stein’s lemma - application to image denoising</a>", arXiv:1412.2210 [cs.CV].
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dd>
-                                H. Rao, D. Saxena, S. Kumar, S. V. Gubbi, B. Amrutur, P. Mony, P. Thankchan, K. Shankar, S. Rao, and S. R. Bhat, "<a href="http://chips.ece.iisc.ernet.in/images/2/25/BIODEVICES_2014_24.pdf">Low power remote neonatal temperature monitoring device</a>", BIODEVICES 2014.
-                            </dd>
-                        </dl>
+                        <h2>Publications</h2>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    S. V. Gubbi and B. Amrutur, "<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6846367">Adaptive Pulse Width Control and Sampling for Low Power Pulse Oximetry</a>", IEEE Transactions on Biomedical Circuits and Systems.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    S. V. Gubbi and B. Amrutur, "<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6814884">All Digital Energy Sensing for Minimum Energy Tracking</a>", IEEE Transactions on VLSI Systems.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    S. V. Gubbi and C. S. Seelamantula, "<a href="http://arxiv.org/abs/1412.2210">Risk estimation without using Stein’s lemma - application to image denoising</a>", arXiv:1412.2210 [cs.CV].
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    H. Rao, D. Saxena, S. Kumar, S. V. Gubbi, B. Amrutur, P. Mony, P. Thankchan, K. Shankar, S. Rao, and S. R. Bhat, "<a href="http://chips.ece.iisc.ernet.in/images/2/25/BIODEVICES_2014_24.pdf">Low power remote neonatal temperature monitoring device</a>", BIODEVICES 2014.
+                                </td>
+                            </tr>
+                        </table>
                     </section>
                 </div>
             </div>
@@ -142,30 +140,30 @@
             <div class="row">
                 <div class="col-md-12">
                     <section id="projects">
-                        <div class="page-header">
-                            <h2>Projects</h2>
-                        </div>
-                        <dl>
-                            <dt>Cooker Counter</dt>
-                            <dd>Android app that uses the microphone to keep track of pressure cooker whistles.</dd>
-                        </dl>
-                        <dl>
-                            <dt>Cookoo</dt>
-                            <dd>A device that keeps track of pressure cooker whistles.</dd>
-                        </dl>
-                        <dl>
-                            <dt>Flat HN</dt>
-                            <dd>This bookmarklet hides nested comments on HackerNews.</dd>
-                        </dl>
-                        <dl>
-                            <dt>All-Digital NTSC Color generation</dt>
-                            <dd>
-                                 A technique to generate double sideband modulated color NTSC televesion signals using
-                                 only a microcontroller and a shift register.
-                                 It improves on Steve Wozniak’s Apple II design by lowering chroma-luma interference
-                                 and adds compatibility with modern flat screen TVs.
-                            </dd>
-                        </dl>
+                        <h2>Hobby Projects</h2>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    Cooker Counter is an Android app that uses the microphone to keep track of pressure cooker whistles.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Cookoo is a device that keeps track of pressure cooker whistles.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Flat HN is a bookmarklet that hides nested comments on HackerNews.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    All-Digital Color NTSC is a technique to generate double sideband modulated color NTSC televesion signals using
+                                    only a microcontroller and a shift register.
+                                </td>
+                            </tr>
+                        </table>
                     </section>
                 </div>
             </div>
@@ -173,14 +171,28 @@
             <div class="row">
                 <div class="col-md-12">
                     <section id="contact">
-                        <div class="page-header">
-                            <h2>Contact</h2>
-                        </div>
-                        My e-mail address is <a href="mailto:me@sagargv.com">me@sagargv.com</a>.
+                        <h2>Contact</h2>
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    Send an e-mail to <a href="mailto:me@sagargv.com">me@sagargv.com</a>.
+                                </td>
+                            </tr>
+                        </table>
                     </section>
                 </div>
             </div>
         </div> <!-- /container -->
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="text-muted">Last updated on October 17, 2015.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="/static/js/jquery.min.js"></script>
