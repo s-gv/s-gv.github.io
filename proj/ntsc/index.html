@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>All Digital NTSC Color</title>
+
+        <!-- Bootstrap -->
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/static/css/lightbox.css" rel="stylesheet">
+
+        <style media="screen">
+            body {
+              padding-top: 20px;
+              padding-bottom: 20px;
+            }
+            .navbar {
+              margin-bottom: 20px;
+            }
+            #maintitle {
+                font-size: 40px;
+            }
+            .jumbotron {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            /* Customize container */
+            @media (min-width: 768px) {
+                .container {
+                    max-width: 730px;
+                }
+            }
+            .footer {
+                margin-top: 25px;
+            }
+            .img-full {
+                width: 100%;
+            }
+        </style>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <!-- Static navbar -->
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="http://blog.sagargv.com">Blog</a></li>
+                        <li><a href="http://github.com/s-gv">Github</a></li>
+                        <li><a href="https://twitter.com/gv_sagar">Twitter</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </nav>
+        </div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jumbotron">
+                        <h1 id="maintitle">All Digital NTSC Color</h1>
+                        <br />
+                        <p class="lead">
+                            Generate NTSC color signal using only digital integrated circuits. An 8-bit microcontroller (Atmega16) and a shift register (74LS195) are used to produce NTSC color signal compatible with modern flat screen TVs.
+                        </p>
+                        <p>
+                            <a class="btn btn-lg btn-primary" href="https://github.com/s-gv/ntsc-avr" role="button">View on GitHub</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        <a href="/proj/ntsc/1.jpg" data-lightbox="proj-img"><img class="img-full img-responsive" src="/proj/ntsc/1_crushed.jpg" alt=""></a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h2>How to use</h2>
+                    </div>
+                    <p class="lead">
+                        Build the circuit in the schematic below and program the microcontroller with the binary file in the <a href="https://github.com/s-gv/ntsc-avr/tree/master/bin">repository</a>. Hook it up to a TV, and you should see a color palette.
+                    </p>
+                    <p>
+                        <a href="/proj/ntsc/2.jpg" data-lightbox="proj-img"><img class="img-full img-responsive" src="/proj/ntsc/2_crushed.jpg" alt=""></a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h2>How does it work?</h2>
+                    </div>
+                    <p class="lead">
+                        NTSC color works by superposing a 3.579545 MHz sub-carrier wave on top of the Black and White NTSC signal. The phase of the subcarrier indicates the color of the "pixel".
+                    </p>
+                    <p class="lead">
+                        A 14.31818 MHz clock, which is 4 times the sub-carrier frequency, is passed through a shift register to generate 4 phases the sub-carrier. The amplitude of these phases in the output signal is controlled by the microcontroller. Thus, different amounts of the in-phase and quadrature components can be added to obtain different colors.
+                    </p>
+                    <p class="lead">
+                        This <a href="http://blog.sagargv.com/2014/07/ntsc-demystified-color-demo-with.html">series</a> of blog posts describes NTSC signals in more detail.
+                    </p>
+                </div>
+            </div>
+        </div> <!-- /container -->
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <footer class="footer">
+                        <p class="text-muted">Last updated on October 19, 2015.</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="/static/js/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/lightbox.min.js"></script>
+  </body>
+</html>
