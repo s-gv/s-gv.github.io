@@ -149,6 +149,13 @@ githubButtonHTML = '''
 </p>
 '''
 
+youtubeHTML = '''
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/fUlSBkm85a4" allowfullscreen></iframe>
+</div>
+<br />
+'''
+
 linkHTML = '''<a href="%(url)s">%(text)s</a>'''
 
 def makeHTML(parseTree):
@@ -167,6 +174,8 @@ def makeHTML(parseTree):
         return linkHTML % {'url': parseTree['url'], 'text': parseTree['text']}
     elif parseTree['type'] == 'github':
         return githubButtonHTML % {'githubURL': parseTree['url']}
+    elif parseTree['type'] == 'youtube':
+        return youtubeHTML % {'youtubeURL': parseTree['url']}
     elif parseTree['type'] == 'img':
         return imgHTML % {'imgURL': parseTree['imgURL'], 'crushedImgURL': parseTree['crushedImgURL'], 'altText': parseTree['txt']}
     assert False, "Unrecognized node type '%s' in parse tree" % parseTree['type']
@@ -190,6 +199,10 @@ def parseMarkdown(mkdown):
             elif re.match(r'^!\[github\]\((.+)\)', l):
                 m = re.match(r'^!\[github\]\((.+)\)', l)
                 lastChildren.append({'type': 'github', 'url': m.group(1), 'children': []})
+                currentChildren = None
+            elif re.match(r'^!\[youtube\]\((.+)\)', l):
+                m = re.match(r'^!\[youtube\]\((.+)\)', l)
+                lastChildren.append({'type': 'youtube', 'url': m.group(1), 'children': []})
                 currentChildren = None
             elif re.match(r'^!\[(.+)\]\((.+)\)', l):
                 m = re.match(r'^!\[(.+)\]\((.+)\)', l)
