@@ -175,6 +175,7 @@ def parseMarkdown(mkdown):
     tree = {'type': 'main', 'date': datetime.datetime.now().strftime('%B %-d, %Y'), 'children': []}
     lastChildren = None
     lines = mkdown.split('\n')
+    currentChildren = None
     for line in lines:
         l = line.strip()
         if len(l) > 0:
@@ -185,19 +186,24 @@ def parseMarkdown(mkdown):
                 if len(first_word) == 1:
                     tree['title'] = ' '.join(words[1:])
                 lastChildren = tree['children'][-1]['children']
+                currentChildren = None
             elif re.match(r'^!\[github\]\((.+)\)', l):
                 m = re.match(r'^!\[github\]\((.+)\)', l)
                 lastChildren.append({'type': 'github', 'url': m.group(1), 'children': []})
+                currentChildren = None
             elif re.match(r'^!\[(.+)\]\((.+)\)', l):
                 m = re.match(r'^!\[(.+)\]\((.+)\)', l)
                 imgURL = m.group(2)
                 dotPosition = imgURL.rfind('.')
                 crushedURL = imgURL[:dotPosition] + '_crushed' + imgURL[dotPosition:]
                 lastChildren.append({'type': 'img', 'txt': m.group(1), 'imgURL': imgURL, 'crushedImgURL': crushedURL, 'children': []})
+                currentChildren = None
             else:
-                lastChildren.append({'type': 'p', 'children': []})
-                currentChildren = lastChildren[-1]['children']
-
+                if not currentChildren:
+                    lastChildren.append({'type': 'p', 'children': []})
+                    currentChildren = lastChildren[-1]['children']
+                else:
+                    l = ' ' + l
                 linkRegEx = r'\[([^\[\]]+)\]\(([^\s]+)\)'
                 links = re.findall(linkRegEx, l)
                 nonLinks = re.sub(linkRegEx, chr(27), l).split(chr(27))
@@ -207,7 +213,8 @@ def parseMarkdown(mkdown):
                     currentChildren.append({'type': 'link', 'text': linkText, 'url': url, 'children': []})
 
                 currentChildren.append({'type': 'plain', 'text': nonLinks[-1], 'children': []})
-
+        else:
+            currentChildren = None
 
     return tree
 

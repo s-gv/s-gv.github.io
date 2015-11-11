@@ -7,10 +7,17 @@ Drag this link, [Flat/Threaded HN](javascript:%7Bif(%22news.ycombinator.com%22%3
 ![Demonstrating Flat HN](/proj/flathn/3.jpg)
 
 ## Why Flat HN?
-Threaded conversations in [Hacker News](https://news.ycombinator.com/) (HN) can be a pain at times. It's easy to lose context as you scroll down a long discussion; see the screenshot below. Jeff Atwood has [written](http://blog.codinghorror.com/web-discussions-flat-by-design/) at length about the issues with threaded discussions and suggests limiting the level of replies allowed.
+Threaded conversations in [Hacker News](https://news.ycombinator.com/) (HN) can
+be a pain at times. It's easy to lose context as you scroll down a long discussion;
+see the screenshot below. Jeff Atwood has [written](http://blog.codinghorror.com/web-discussions-flat-by-design/)
+at length about the issues with threaded discussions and suggests limiting the
+level of replies allowed.
 ![Threaded Conversations in HN](/proj/flathn/1.jpg)
 
 ## How does it work?
-HN's html suggests hiding deeply threaded comments should be simple. A spacer GIF appears to be used to indent comments, and those spacers used for indentation seem to have width in multiples of 40 in proportion to the depth of the comment.
-The idea is to have some javascript as a bookmark, and this script gets executed in the context of the page that is open when you click on the bookmarklet.
+HN's html suggests hiding deeply threaded comments should be simple. A spacer
+GIF appears to be used to indent comments, and those spacers used for indentation
+seem to have width in multiples of 40 in proportion to the depth of the comment.
+The idea is to have some javascript as a bookmark, and this script gets executed
+in the context of the page that is open when you click on the bookmarklet.
 ![How Flat HN works](/proj/flathn/2.jpg)
