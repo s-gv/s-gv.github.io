@@ -10,7 +10,7 @@ mainHTML = '''
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Flat HN</title>
+        <title>%(title)s</title>
 
         <!-- Bootstrap -->
         <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -154,7 +154,7 @@ linkHTML = '''<a href="%(url)s">%(text)s</a>'''
 def makeHTML(parseTree):
     contents = [makeHTML(childTree) for childTree in parseTree['children']]
     if parseTree['type'] == 'main':
-        return mainHTML % {'date': parseTree['date'], 'content': '\n'.join(contents)}
+        return mainHTML % {'date': parseTree['date'], 'content': '\n'.join(contents), 'title': parseTree['title']}
     elif parseTree['type'] == 'h1':
         return mainHeadingHTML % {'heading': parseTree['heading'], 'content': '\n'.join(contents)}
     elif parseTree['type'] == 'h2':
@@ -182,6 +182,8 @@ def parseMarkdown(mkdown):
             first_word = words[0]
             if len(set(first_word)) == 1 and '#' in first_word:
                 tree['children'].append({'type': 'h' + str(len(first_word)), 'heading': ' '.join(words[1:]), 'children': []})
+                if len(first_word) == 1:
+                    tree['title'] = ' '.join(words[1:])
                 lastChildren = tree['children'][-1]['children']
             elif re.match(r'^!\[github\]\((.+)\)', l):
                 m = re.match(r'^!\[github\]\((.+)\)', l)
