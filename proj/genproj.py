@@ -149,9 +149,7 @@ githubButtonHTML = '''
 </p>
 '''
 
-linkHTML = '''
-<a href="%(url)s">%(text)s</a>
-'''
+linkHTML = '''<a href="%(url)s">%(text)s</a>'''
 
 def makeHTML(parseTree):
     contents = [makeHTML(childTree) for childTree in parseTree['children']]
@@ -162,7 +160,7 @@ def makeHTML(parseTree):
     elif parseTree['type'] == 'h2':
         return subHeadingHTML % {'heading': parseTree['heading'], 'content': '\n'.join(contents)}
     elif parseTree['type'] == 'p':
-        return paragraphHTML % {'content': ' '.join(contents)}
+        return paragraphHTML % {'content': ''.join(contents)}
     elif parseTree['type'] == 'plain':
         return parseTree['text']
     elif parseTree['type'] == 'link':
