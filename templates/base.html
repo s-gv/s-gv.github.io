@@ -10,9 +10,11 @@
         <style>
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 16px;
-            line-height: 1.428571429;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
             margin-bottom: 100px;
+            margin-left: 0;
+            margin-right: 0;
         }
         a {
             text-decoration: none;
@@ -30,10 +32,26 @@
             text-align: center;
             margin-top: 10px;
             margin-bottom: 10px;
+            font-size: 21px;
         }
         #content {
-            max-width: 39em;
+            font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+            font-size: 21px;
+            line-height: 1.58;
+            font-weight: 400;
+            font-style: normal;
+            max-width: 700px;
             margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        @media (max-width: 767px) {
+            #content {
+                font-size: 18px;
+            }
+            #topnav {
+                font-size: 18px;
+            }
         }
         </style>
     </head>
@@ -45,7 +63,7 @@
             <a class="nav-element" href="https://twitter.com/gv_sagar">twitter</a>
         </div>
         <div id="content">
-            %(content)s
+%(content)s
         </div>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
