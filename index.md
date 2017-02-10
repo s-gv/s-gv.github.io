@@ -1,9 +1,9 @@
 # Sagar Gubbi
-#### me@sagargv.com
+*[me@sagargv.com](mailto:me@sagargv.com)*
 
-I'm a PhD student advised by Prof. Bharadwaj Amrutur at the Indian Institute
-Of Science. My current research is on natural scene text recognition. In a
-previous life, I worked on low-power circuits.
+I'm a PhD student advised by [Prof. Bharadwaj Amrutur](http://chips.ece.iisc.ernet.in/index.php/Bharadwaj_Amrutur) at the
+Indian Institute Of Science.  My current research is on natural scene text recognition.
+In a previous life, I worked on low-power circuits.
 
 ## Pet Projects
 - [Cooker Counter](https://play.google.com/store/apps/details?id=com.sagargv.cookercounter) is an Android app that uses the microphone to keep track of pressure cooker whistles.
