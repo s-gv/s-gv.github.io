@@ -1,10 +1,10 @@
 # All Digital NTSC Color
+*July 13, 2014*
 
 Generate NTSC color signal using only digital integrated circuits. An 8-bit
 microcontroller (Atmega16) and a shift register (74LS195) are used to produce
-NTSC color signal compatible with modern flat screen TVs.
-
-![github](https://github.com/s-gv/ntsc-avr)
+NTSC color signal compatible with modern flat screen TVs. The schematic and
+source code are [here](https://github.com/s-gv/ntsc-avr).
 
 ## What colors can it produce?
 
@@ -32,5 +32,5 @@ these phases in the output signal is controlled by the microcontroller. Thus,
 different amounts of the in-phase and quadrature components can be added to
 obtain different colors.
 
-This [series](http://blog.sagargv.com/2014/07/ntsc-demystified-color-demo-with.html)
+This [series](http://sagargv.blogspot.com/2014/07/ntsc-demystified-color-demo-with.html)
 of blog posts describes NTSC signals in more detail.
