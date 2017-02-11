@@ -3,9 +3,6 @@ import sys
 import re
 import os
 
-template = '''
-'''
-
 def main():
     if len(sys.argv) != 3:
         print "Incorrent number of arguments.\n"
@@ -20,11 +17,14 @@ def main():
             for match in re.finditer(r'<img[^>]+src="([^"]+)"[^>]*>', rendered):
                 img_tag = match.group(0)
                 img_src = match.group(1)
-                filename, file_extension = os.path.splitext(img_src)
-                crushed_img_src = filename + '-crushed' + file_extension
-                new_img_tag = img_tag.replace('src="'+img_src+'"', 'src="%s"'% crushed_img_src)
-                new_anchored_img_tag = '<a href="'+img_src+'">'+new_img_tag+'</a>'
-                rendered = rendered.replace(img_tag, new_anchored_img_tag)
+                if 'youtube.com/embed' in img_src:
+                    new_img_tag = '<div class="embed-container"><iframe src="'+img_src+'" frameborder="0" allowfullscreen></iframe></div>'
+                else:
+                    filename, file_extension = os.path.splitext(img_src)
+                    crushed_img_src = filename + '-crushed' + file_extension
+                    new_img_tag = img_tag.replace('src="'+img_src+'"', 'src="%s"'% crushed_img_src)
+                    new_img_tag = '<a href="'+img_src+'">'+new_img_tag+'</a>'
+                rendered = rendered.replace(img_tag, new_img_tag)
             print rendered
 
 if __name__ == '__main__':

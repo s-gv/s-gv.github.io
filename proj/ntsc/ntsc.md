@@ -10,7 +10,7 @@ source code are [here](https://github.com/s-gv/ntsc-avr).
 
 Below is a sample palette produced by this technique.
 
-![Sample](/proj/ntsc/1.jpg)
+![Sample](1.jpg)
 
 ## How to use
 
@@ -18,7 +18,7 @@ Build the circuit in the schematic below and program the microcontroller with
 the binary file in the [repository](https://github.com/s-gv/ntsc-avr/tree/master/bin).
 Hook it up to a TV, and you should see a color palette.
 
-![Circuit](/proj/ntsc/2.jpg)
+![Circuit](2.jpg)
 
 ## How does it work?
 
