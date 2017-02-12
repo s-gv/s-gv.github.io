@@ -8,3 +8,4 @@ Site generator deps
 
 - Python
 - markdown
+- Jinja2
