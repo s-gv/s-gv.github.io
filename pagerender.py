@@ -17,7 +17,7 @@ def main():
             img_tag = match.group(0)
             img_src = match.group(1)
             if 'youtube.com/embed' in img_src:
-                new_img_tag = '<div class="embed-container"><iframe src="'+img_src+'" frameborder="0" allowfullscreen></iframe></div>'
+                new_img_tag = '<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;"><iframe src="'+img_src+'" frameborder="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen></iframe></div>'
             else:
                 filename, file_extension = os.path.splitext(img_src)
                 crushed_img_src = filename + '-crushed' + file_extension
