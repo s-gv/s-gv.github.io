@@ -10,12 +10,12 @@ Cookoo
 
         </title>
         <style>
-        #topnav {
+        .nav {
             text-align: center;
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        #content {
+        .content {
             max-width: 40em;
             margin: 0 auto;
             padding: 0 10px;
@@ -35,10 +35,10 @@ Cookoo
         a {
             text-decoration: none;
         }
-        a:link, .nav-element, .nav-element:visited {
+        a:link, .nav a, .nav a:visited {
             color: #07C;
         }
-        a:hover, a:active, .nav-element:visited:active, .nav-element:visited:hover {
+        a:hover, a:active, .nav a:visited:active, .nav a:visited:hover {
             color: #3af;
         }
         a:visited {
@@ -47,13 +47,13 @@ Cookoo
         </style>
     </head>
     <body>
-        <div id="topnav">
-            <a class="nav-element" href="/">home</a> &middot;
-            <a class="nav-element" href="/blog">blog</a> &middot;
-            <a class="nav-element" href="https://github.com/s-gv/">github</a> &middot;
-            <a class="nav-element" href="https://twitter.com/gv_sagar">twitter</a>
+        <div class="nav">
+            <a href="/">home</a> &middot;
+            <a href="/blog">blog</a> &middot;
+            <a href="https://github.com/s-gv/">github</a> &middot;
+            <a href="https://twitter.com/gv_sagar">twitter</a>
         </div>
-        <div id="content">
+        <div class="content">
 
 <h1>Cookoo</h1>
 <p><em>December 1, 2014</em></p>
