@@ -7,9 +7,9 @@ In a previous life, I worked on low-power circuits.
 
 ## Pet Projects
 - [Cooker Counter](https://play.google.com/store/apps/details?id=com.sagargv.cookercounter) is an Android app that uses the microphone to keep track of pressure cooker whistles.
-- [Cookoo](/proj/cookoo) is a device that keeps track of pressure cooker whistles.
-- [Flat HN](/proj/flathn) is a bookmarklet that hides nested comments on HackerNews.
-- [All-Digital Color NTSC](/proj/ntsc) is a technique to generate double sideband modulated color NTSC televesion signals using only a microcontroller and a shift register.
+- [Cookoo](/proj/cookoo/) is a device that keeps track of pressure cooker whistles.
+- [Flat HN](/proj/flathn/) is a bookmarklet that hides nested comments on HackerNews.
+- [All-Digital Color NTSC](/proj/ntsc/) is a technique to generate double sideband modulated color NTSC televesion signals using only a microcontroller and a shift register.
 
 ## Publications
 - S. Gubbi, A. Gupta and C. S. Seelamantula, "[How much can a Gaussian smoother denoise?](http://dl.acm.org/citation.cfm?id=3010027)", Proceedings of the Tenth Indian Conference on Computer Vision, Graphics and Image Processing, 2016.
