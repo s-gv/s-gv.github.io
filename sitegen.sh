@@ -3,6 +3,6 @@
 python pagerender.py index.md home.html > index.html
 python pagerender.py blog/index.md blogindex.html > blog/index.html
 
-python pagerender.py proj/cookoo2/cookoo.md proj.html > proj/cookoo2/index.html
-python pagerender.py proj/flathn/flathn.md proj.html > proj/flathn/index.html
-python pagerender.py proj/ntsc/ntsc.md proj.html > proj/ntsc/index.html
+find proj -mindepth 1 -maxdepth 1 -type d -exec sh -c "python pagerender.py {}/index.md proj.html > {}/index.html" \;
+
+find blog -mindepth 1 -maxdepth 1 -type d -exec sh -c "python pagerender.py {}/index.md blog.html > {}/index.html" \;

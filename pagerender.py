@@ -9,7 +9,7 @@ def main():
         print "Incorrent number of arguments.\n"
         print "Usage: python pagerender.py input.md template.html > output.html"
         print "Parse markdown and generate HTML."
-        exit(1)
+        sys.exit(1)
 
     with open(sys.argv[1]) as f_ip:
         content = markdown.markdown(f_ip.read(), output_format='html5')
