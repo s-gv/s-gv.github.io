@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Sagar's blog</title>
+        <link>{{ base_url }}</link>
+        <description>Recent content on Sagar's blog</description>
+        <generator>feedrender.py -- www.sagargv.com</generator>
+        <language>en-us</language>
+        <lastBuildDate>{{ last_build_date }}</lastBuildDate>
+
+        <atom:link href="{{ base_url }}/blog/atom.xml" rel="self" type="application/rss+xml" />
+
+        {% for item in items %}
+        <item>
+            <title>{{ item.title }}</title>
+            <link>{{ base_url }}/{{ item.link }}</link>
+            <pubDate>{{ item.pub_date }}</pubDate>
+
+            <guid>{{ base_url }}/{{ item.link }}</guid>
+            <description>{{ item.desc }}</description>
+        </item>
+        {% endfor %}
+    </channel>
+</rss>
