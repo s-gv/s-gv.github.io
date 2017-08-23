@@ -36,7 +36,8 @@ def main():
     items = sorted(items, key=lambda item: item['pub_time'], reverse=True)
     items = items[:10]
     rendered = jinja2.Environment(loader=jinja2.FileSystemLoader('./templates')).get_template(template).render({
-        'base_url': base_url,
+        'blog_url': base_url + "/blog/",
+        'feed_url': base_url + "/blog/atom.xml",
         'last_build_date': datetime.datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S") + " +0000",
         'items': items,
     })
