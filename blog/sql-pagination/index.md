@@ -1,7 +1,5 @@
 # Pagination in SQL
 *Aug 25, 2017*
 
-TODO is my daj job.
+TODO
 
-My night life is open source.
-HAHAHA
