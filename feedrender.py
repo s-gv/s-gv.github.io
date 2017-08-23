@@ -24,13 +24,11 @@ def main():
             pub_date = datetime.datetime.strptime(pub_date.group(1), '%b %d, %Y')
             desc = re.search(r'20[0-9][0-9]</em></p>([\s\S]+)', content) # look for content after the date
             desc = desc.group(1)
-            desc = re.sub(r'</p>', '</p>\n', desc)
-            desc = re.sub(r'<([^>]+)>', ' ', desc)
             item = {
                 'title': title,
                 'pub_date': pub_date.strftime("%a, %d %b %Y %H:%M:%S") + " +0000",
                 'pub_time': pub_date,
-                'desc': desc,
+                'desc': '<![CDATA['+desc+']]>',
                 'link': base_url + "/blog/" + blog + "/"
             }
             items.append(item)
