@@ -13,10 +13,10 @@
         {% for item in items %}
         <item>
             <title>{{ item.title }}</title>
-            <link>{{ base_url }}/{{ item.link }}</link>
+            <link>{{ item.link }}</link>
             <pubDate>{{ item.pub_date }}</pubDate>
 
-            <guid>{{ base_url }}/{{ item.link }}</guid>
+            <guid>{{ item.link }}</guid>
             <description>{{ item.desc }}</description>
         </item>
         {% endfor %}
