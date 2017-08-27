@@ -1,7 +1,7 @@
 # Pagination in SQL
 *Aug 25, 2017*
 
-Here are two ways to paginate the results of an SQL query that work across all
+Here are two ways to paginate the results of a SQL query that work across all
 the popular SQL databases.
 
 ## Truncate the results
