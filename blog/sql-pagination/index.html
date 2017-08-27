@@ -13,22 +13,22 @@ Pagination in SQL
 <link rel="alternate" type="application/rss+xml" title="Sagar&#39;s blog" href="http://www.sagargv.com/blog/atom.xml" />
 
         <style>
-        .nav {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .content {
-            max-width: 40em;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
         body {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
             line-height: 1.58;
             margin-bottom: 50px;
+        }
+        .content {
+            max-width: 40em;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+        .nav {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         img {
             max-width: 100%;
@@ -61,7 +61,31 @@ Pagination in SQL
 
 <h1>Pagination in SQL</h1>
 <p><em>Aug 25, 2017</em></p>
-<p>TODO</p>
+<p>Here are two ways to paginate the results of a SQL query that work across all
+the popular SQL databases.</p>
+<h2>Truncate the results</h2>
+<p>Silly though it sounds, this might be a reasonable strategy. Suppose you want
+to show 15 results per page. Then, show upto 20 pages, and stop there. This works
+well when it's unlikely that anyone would want to see past the first few pages.
+Incidentally, Google does something like this for web search results.</p>
+<p><code>SELECT * FROM users ORDER BY last_name LIMIT 15 OFFSET 45;</code></p>
+<p>This query is not efficient for large offsets because rows upto the offset have
+to be read and discarded. But that's OK since the offset is limited to a few
+hundred rows at most. It's a net win if only the first few pages are read most
+of the time.</p>
+<h2>Keep track of the first and last result in a page</h2>
+<p>This is based on the idea that random access is not really needed and that it's often
+necessary to only access the next page and the previous page from any given page.
+When you're on the fourth page, accessing a random page, say page 3124, might
+be in-efficient. But, accessing the third and fifth pages are efficient if the
+right indexes have been setup. This is accomplished by keeping track of the first
+and last values of the column on which queries are ordered.</p>
+<p><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;</code></p>
+<p>When the next page is requested, the query is executed with the creation_date
+of the last user in the current page. If the previous page is requested, the
+creation_date of the first user in the current page is used:</p>
+<p><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;</code></p>
+<p>Another example is in the <a href="http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor">SQLite wiki</a>.</p>
 
         </div>
         <script>
