@@ -81,9 +81,9 @@ be in-efficient. But, accessing the third and fifth pages are efficient if the
 right indexes have been setup. This is accomplished by keeping track of the first
 and last values of the column on which queries are ordered.</p>
 <p><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;</code></p>
-<p>When the next page is requested, the query is executed with the creation_date
+<p>When the next page is requested, the query is executed with the <code>creation_date</code>
 of the last user in the current page. If the previous page is requested, the
-creation_date of the first user in the current page is used:</p>
+<code>creation_date</code> of the first user in the current page is used:</p>
 <p><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;</code></p>
 <p>Another example is in the <a href="http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor">SQLite wiki</a>.</p>
 

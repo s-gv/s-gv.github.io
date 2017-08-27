@@ -31,9 +31,9 @@ and last values of the column on which queries are ordered.
 SELECT * FROM users WHERE creation_date > ? ORDER BY creation_date LIMIT 15;
 ```
 
-When the next page is requested, the query is executed with the creation_date
+When the next page is requested, the query is executed with the `creation_date`
 of the last user in the current page. If the previous page is requested, the
-creation_date of the first user in the current page is used:
+`creation_date` of the first user in the current page is used:
 
 ```
 SELECT * FROM users WHERE creation_date < ? ORDER BY creation_date DESC LIMIT 15;
