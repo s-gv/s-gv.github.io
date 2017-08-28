@@ -60,16 +60,16 @@ Pagination in SQL
         <div class="content">
 
 <h1>Pagination in SQL</h1>
-<p><em>Aug 25, 2017</em></p>
+<p><em>Aug 27, 2017</em></p>
 <p>Here are two ways to paginate the results of a SQL query that work across all
 the popular SQL databases.</p>
 <h2>Truncate the results</h2>
 <p>Silly though it sounds, this might be a reasonable strategy. Suppose you want
-to show 15 results per page. Then, show upto 20 pages, and stop there. This works
+to show 15 results per page. Then, show up to 20 pages, and stop there. This works
 well when it's unlikely that anyone would want to see past the first few pages.
 Incidentally, Google does something like this for web search results.</p>
-<p><code>SELECT * FROM users ORDER BY last_name LIMIT 15 OFFSET 45;</code></p>
-<p>This query is not efficient for large offsets because rows upto the offset have
+<p><code>SELECT * FROM users ORDER BY creation_date LIMIT 15 OFFSET 45;</code></p>
+<p>This query is not efficient for large offsets because rows up to the offset have
 to be read and discarded. But that's OK since the offset is limited to a few
 hundred rows at most. It's a net win if only the first few pages are read most
 of the time.</p>
@@ -77,15 +77,17 @@ of the time.</p>
 <p>This is based on the idea that random access is not really needed and that it's often
 necessary to only access the next page and the previous page from any given page.
 When you're on the fourth page, accessing a random page, say page 3124, might
-be in-efficient. But, accessing the third and fifth pages are efficient if the
+be inefficient. But, accessing the third and fifth pages are efficient if the
 right indexes have been setup. This is accomplished by keeping track of the first
-and last values of the column on which queries are ordered.</p>
+and last values of the column on which the results are ordered.</p>
 <p><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;</code></p>
 <p>When the next page is requested, the query is executed with the <code>creation_date</code>
-of the last user in the current page. If the previous page is requested, the
-<code>creation_date</code> of the first user in the current page is used:</p>
+of the last user in the current page. For the previous page, the <code>creation_date</code>
+of the first user in the current page is used:</p>
 <p><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;</code></p>
-<p>Another example is in the <a href="http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor">SQLite wiki</a>.</p>
+<p>If the column by which the results are sorted is not unique, add additional columns or
+the primary key to <code>ORDER BY</code> and keep track of the first and last values of those columns as well.</p>
+<p>Another example of using this method for pagination is in the <a href="http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor">SQLite wiki</a>.</p>
 
         </div>
         <script>
