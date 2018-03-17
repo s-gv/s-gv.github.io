@@ -2,7 +2,7 @@
 *Aug 27, 2017*
 
 Here are two ways to paginate the results of a SQL query that work across all
-the popular SQL databases.
+the popular SQL database systems.
 
 ## Truncate the results
 Silly though it sounds, this might be a reasonable strategy. Suppose you want
