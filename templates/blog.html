@@ -11,11 +11,16 @@
 {% block nav %}
 <a href="/">home</a> &middot;
 <a href="/blog/">blog</a> &middot;
-<a href="/blog/atom.xml">rss</a> &middot;
 <a href="https://github.com/s-gv/">github</a> &middot;
 <a href="https://twitter.com/gv_sagar">twitter</a>
 {% endblock %}
 
 {% block content %}
 {{ content }}
+<hr>
+<p>
+    Want to get notified of new blog posts?
+    Subscribe to the <a href="/blog/atom.xml">rss</a> feed or
+    join the <a href="http://eepurl.com/doq18z" rel="nofollow" target="_blank">mailing list</a>.
+</p>
 {% endblock %}
