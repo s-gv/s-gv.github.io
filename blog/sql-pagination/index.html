@@ -21,7 +21,7 @@ Pagination in SQL
             margin-bottom: 50px;
         }
         .content {
-            max-width: 34em;
+            max-width: 35em;
             margin: 0 auto;
             padding: 0 10px;
         }
@@ -47,6 +47,11 @@ Pagination in SQL
         a:visited {
             color: #005999;
         }
+        pre {
+            overflow-x: auto;
+            padding: 5px;
+            background-color: #eee;
+        }
         </style>
     </head>
     <body>
@@ -69,7 +74,9 @@ the popular SQL database systems.</p>
 to show 15 results per page. Then, show up to 20 pages, and stop there. This works
 well when it's unlikely that anyone would want to see past the first few pages.
 Incidentally, Google does something like this for web search results.</p>
-<p><code>SELECT * FROM users ORDER BY creation_date LIMIT 15 OFFSET 45;</code></p>
+<pre><code>SELECT * FROM users ORDER BY creation_date LIMIT 15 OFFSET 45;
+</code></pre>
+
 <p>This query is not efficient for large offsets because rows up to the offset have
 to be read and discarded. But that's OK since the offset is limited to a few
 hundred rows at most. It's a net win if only the first few pages are read most
@@ -81,11 +88,15 @@ When you're on the fourth page, accessing a random page, say page 3124, might
 be inefficient. But, accessing the third and fifth pages are efficient if the
 right indexes have been setup. This is accomplished by keeping track of the first
 and last values of the column on which the results are ordered.</p>
-<p><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;</code></p>
+<pre><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;
+</code></pre>
+
 <p>When the next page is requested, the query is executed with the <code>creation_date</code>
 of the last user in the current page. For the previous page, the <code>creation_date</code>
 of the first user in the current page is used:</p>
-<p><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;</code></p>
+<pre><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;
+</code></pre>
+
 <p>If the column by which the results are sorted is not unique, add additional columns or
 the primary key to <code>ORDER BY</code> and keep track of the first and last values of those columns as well.</p>
 <p>Another example of using this method for pagination is in the <a href="http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor">SQLite wiki</a>.</p>
