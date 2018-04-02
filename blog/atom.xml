@@ -6,10 +6,151 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 02 Nov 2017 18:15:47 +0000</lastBuildDate>
+        <lastBuildDate>Mon, 02 Apr 2018 07:11:31 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
+        
+        <item>
+            <title>Host Your Own Private Git Repos</title>
+            <link>http://www.sagargv.com/blog/host-your-own-private-git-repos/</link>
+            <pubDate>Sun, 25 Mar 2018 00:00:00 +0000</pubDate>
+
+            <guid>http://www.sagargv.com/blog/host-your-own-private-git-repos/</guid>
+            <description><![CDATA[
+<p>Hosting git repos on your own server is actually quite easy.
+Login to the server, create a new directory, and initialize a bare repo:</p>
+<pre><code>mkdir foo.git
+cd foo.git
+git init --bare
+</code></pre>
+
+<p>That's it! Now, from the client, clone this repo with:</p>
+<pre><code>git clone username@example.com:path/to/foo.git
+</code></pre>
+
+<p>Having a dedicated user for git repos on the server makes it easier share access to the repo.
+Create a new user <code>git</code> with a login shell restricted to git commands:</p>
+<pre><code>sudo adduser --shell $(which git-shell) git
+</code></pre>
+
+<p>Now create a repo in the home directory of the <code>git</code> user:</p>
+<pre><code>cd /home/git
+sudo -u git mkdir bar.git
+cd bar.git
+sudo -u git git init --bare
+</code></pre>
+
+<p>As before, clone the new repo from the client using:</p>
+<pre><code>git clone git@example.com:bar
+</code></pre>
+
+<h2>Backup the repos</h2>
+<p>This is my script to take daily backups of all the git repos on the server to Amazon S3.</p>
+<pre><code>#!/bin/bash
+
+set -e
+
+GITDIR=/home/git
+TMPDIR=/tmp/gitbackup
+
+renice -n 15 $$
+
+trap &quot;rm -f /tmp/gitbackup/*.git.tar.gz&quot; EXIT
+
+mkdir -p ${TMPDIR}
+cd ${TMPDIR}
+
+for proj in ${GITDIR}/*.git; do
+    base=$(basename $proj)
+    tar -C $GITDIR -zcf ${base}.tar.gz $base
+done
+
+export AWS_ACCESS_KEY_ID=xxxxx
+export AWS_SECRET_ACCESS_KEY=yyyyy
+export AWS_DEFAULT_REGION=us-west-2
+
+aws s3 cp ${TMPDIR}/*.git.tar.gz s3://mygitbucket/
+</code></pre>
+
+<p>If the repos are large, it might be worthwhile checking whether
+the hash of the gzipped repo has changed before uploading.
+It's also good idea to use <code>envdir</code> to manage the access keys rather
+than putting them in the backup script.</p>
+<h2>Web front-end using cgit and nginx</h2>
+<p>Sometimes it's useful to view source code and commits on a
+web browser. <code>cgit</code> is an awesome light-weight webapp for this.
+Unlike heavy apps like GitLab, <code>cgit</code> needs no database, which
+reduces the administrative burden.</p>
+<p>Install cgit, nginx, fcgiwrap, and apache-tools (to create a <code>.htpasswd</code> file).</p>
+<pre><code>sudo apt install cgit nginx fcgiwrap apache2-utils
+</code></pre>
+
+<p>Specify the location of the git repos and static assets in the 
+<code>cgit</code> config at <code>/etc/cgitrc</code>.</p>
+<pre><code>css=/cgit-static/cgit.css
+logo=/cgit-static/cgit.png
+favicon=/cgit-static/favicon.ico
+
+#source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
+
+scan-path=/home/git/
+</code></pre>
+
+<p>To get syntax highlighting, install <code>python-pygments</code> and uncomment the source-filter option.</p>
+<p>If you'd like to password protect access to <code>www.example.com/git/</code>, create a <code>.htpasswd</code> file:</p>
+<pre><code>sudo htpasswd /etc/nginx/.htpasswd &lt;username&gt;
+</code></pre>
+
+<p>This is my <code>nginx</code> conf file to serve <code>cgit</code> from <code>www.example.com/git/</code>.</p>
+<pre><code>server {
+    listen 80;
+    listen [::]:80;
+
+    server_name www.example.com;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/www.example.com;
+    }
+    location / {
+        return 301 https://www.example.com$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name www.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/www.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/www.example.com/privkey.pem;
+
+    location /cgit-static/ {
+        alias /usr/share/cgit/;
+    }
+
+    location /cgit/ {
+        auth_basic &quot;Restricted&quot;;
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        include fastcgi_params;
+        fastcgi_split_path_info ^(/cgit)(.*)$;
+        fastcgi_param   PATH_INFO        $fastcgi_path_info;
+        fastcgi_param   SCRIPT_FILENAME  /usr/lib/cgit/cgit.cgi;
+        fastcgi_param   QUERY_STRING     $args;
+        fastcgi_param   HTTP_HOST        $server_name;
+        fastcgi_pass    unix:/var/run/fcgiwrap.socket;
+    }
+
+    location / {
+        root /var/www/www.example.com;
+    }
+}
+</code></pre>
+
+<p>You might also want to restrict repo access to only whitelisted IPs.</p>]]></description>
+        </item>
         
         <item>
             <title>Pagination in SQL</title>
@@ -19,13 +160,15 @@
             <guid>http://www.sagargv.com/blog/sql-pagination/</guid>
             <description><![CDATA[
 <p>Here are two ways to paginate the results of a SQL query that work across all
-the popular SQL databases.</p>
+the popular SQL database systems.</p>
 <h2>Truncate the results</h2>
 <p>Silly though it sounds, this might be a reasonable strategy. Suppose you want
 to show 15 results per page. Then, show up to 20 pages, and stop there. This works
 well when it's unlikely that anyone would want to see past the first few pages.
 Incidentally, Google does something like this for web search results.</p>
-<p><code>SELECT * FROM users ORDER BY creation_date LIMIT 15 OFFSET 45;</code></p>
+<pre><code>SELECT * FROM users ORDER BY creation_date LIMIT 15 OFFSET 45;
+</code></pre>
+
 <p>This query is not efficient for large offsets because rows up to the offset have
 to be read and discarded. But that's OK since the offset is limited to a few
 hundred rows at most. It's a net win if only the first few pages are read most
@@ -37,11 +180,15 @@ When you're on the fourth page, accessing a random page, say page 3124, might
 be inefficient. But, accessing the third and fifth pages are efficient if the
 right indexes have been setup. This is accomplished by keeping track of the first
 and last values of the column on which the results are ordered.</p>
-<p><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;</code></p>
+<pre><code>SELECT * FROM users WHERE creation_date &gt; ? ORDER BY creation_date LIMIT 15;
+</code></pre>
+
 <p>When the next page is requested, the query is executed with the <code>creation_date</code>
 of the last user in the current page. For the previous page, the <code>creation_date</code>
 of the first user in the current page is used:</p>
-<p><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;</code></p>
+<pre><code>SELECT * FROM users WHERE creation_date &lt; ? ORDER BY creation_date DESC LIMIT 15;
+</code></pre>
+
 <p>If the column by which the results are sorted is not unique, add additional columns or
 the primary key to <code>ORDER BY</code> and keep track of the first and last values of those columns as well.</p>
 <p>Another example of using this method for pagination is in the <a href="http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor">SQLite wiki</a>.</p>]]></description>

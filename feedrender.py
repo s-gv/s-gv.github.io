@@ -17,7 +17,7 @@ def main():
     for blog in os.walk(blogs_dir).next()[1]:
         blog_md_path = blogs_dir + blog + "/index.md"
         with open(blog_md_path) as f_blog_md:
-            content = markdown.markdown(f_blog_md.read(), output_format='html5')
+            content = markdown.markdown(f_blog_md.read(), extensions=['markdown.extensions.fenced_code'], output_format='html5')
             title = re.search(r'<h1>([^<]+)</h1>', content)
             title = title.group(1)
             pub_date = re.search(r'<p><em>([^<]+, 20[0-9][0-9])</em></p>', content)

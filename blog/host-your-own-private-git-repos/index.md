@@ -1,5 +1,5 @@
 # Host Your Own Private Git Repos
-*March 25, 2018*
+*Mar 25, 2018*
 
 Hosting git repos on your own server is actually quite easy.
 Login to the server, create a new directory, and initialize a bare repo:
