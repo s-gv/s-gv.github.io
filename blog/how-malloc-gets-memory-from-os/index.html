@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            
+How malloc gets memory from the OS
+
+        </title>
+        
+<link rel="alternate" type="application/rss+xml" title="Sagar&#39;s blog" href="http://www.sagargv.com/blog/atom.xml" />
+
+        <style>
+        body {
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            line-height: 1.6;
+            margin-bottom: 50px;
+        }
+        .content {
+            max-width: 35em;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+        .nav {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:link, .nav a, .nav a:visited {
+            color: #07C;
+        }
+        a:hover, a:active, .nav a:visited:active, .nav a:visited:hover {
+            color: #3af;
+        }
+        a:visited {
+            color: #005999;
+        }
+        pre {
+            overflow-x: auto;
+            padding: 5px;
+            background-color: #eee;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="nav">
+
+<a href="/">home</a> &middot;
+<a href="/blog/">blog</a> &middot;
+<a href="https://github.com/s-gv/">github</a> &middot;
+<a href="https://twitter.com/gv_sagar">twitter</a>
+
+        </div>
+        <div class="content">
+
+<h1>How malloc gets memory from the OS</h1>
+<p><em>Apr 22, 2018</em></p>
+<p>In the old days of 8086, 16-bit programs accessed physical memory directly.
+This would be valid code and would work:</p>
+<pre><code>int main()
+{
+    int *p = (int *)0x02ad;
+    return *p;
+}
+</code></pre>
+
+<p>x86 processors still boot into 16-bit real mode where this is fine, but the
+OS switches the processor into protected mode which enables virtual memory.
+Once virtual memory is enabled, each process has its own virtual memory
+that the OS has to map (to physical memory, files on the hard drive, device registers, etc.).
+If the program tries to access unmapped memory, a segfault happens.</p>
+<p>When Linux starts a process and loads the executable to memory, the layout of
+the virtual address space looks something like this:</p>
+<pre><code>---------------
+|             |
+|    stack    |
+|             |
+--------------- 0x7ffc725866b4
+|             |
+|             |
+|             |
+|   unmapped  |
+|    space    |
+|             |
+|             |
+|             |
+--------------- 0x000001773000
+|             |
+| data (bss)  |
+|             |
+---------------
+|             |
+|    data     |
+|             |
+---------------
+|             |
+|    text     |
+|             |
+---------------
+</code></pre>
+
+<p>The <code>text</code> segment contains the binary code of the executable, the <code>data</code> segment
+has initialized static variables, the <code>bss</code> segment has uninitialized static variables
+(zeroed out before main() function is called), and the <code>stack</code> segment contains the stack
+(There's also space for the environment variables, and the OS kernel space is also mapped
+for performance reasons, but I've skipped these in the diagram.) The adresses of 
+the these segments is randomized when the executable is loaded as a security measure (ASLR).</p>
+<p>When <code>malloc()</code> is called, it tries to allocate memory from previously freed memory that
+is still mapped to the process. But if there is insufficient free memory, <code>malloc()</code> must
+make one of these system calls to request the OS to map additional memory:</p>
+<ul>
+<li>
+<p>The <code>brk</code> / <code>sbrk</code> system calls enlarge the data segment. In the diagram above, calling <code>sbrk(8)</code>
+would move the end of the data segment from <code>0x1773000</code> to <code>0x1773008</code>. If the process wants
+to free the memory and return it to the OS, the data segment can be shrunk with the same syscalls.</p>
+</li>
+<li>
+<p>The <code>mmap</code> syscall can map pages anywhere in the virtual address space (the equivalent syscall
+in Windows is <code>VirtualAlloc</code>).</p>
+</li>
+</ul>
+<p>The <code>malloc</code> implementation in glibc uses <code>sbrk</code> when it needs small amounts of memory (~32K) and <code>mmap</code>
+when it needs large amounts of memory. The reason <code>mmap</code> is preferred for large objects is to prevent
+losing too much memory to fragmentation in the data segment; if a small object is allocated with <code>sbrk</code>
+after a large object and then, if the large object is freed, that memory cannot be freed
+until the small object is freed as well.</p>
+<hr>
+<p>
+    Want to get notified of new blog posts?
+    Subscribe to the <a href="/blog/atom.xml">rss</a> feed or
+    join the <a href="http://eepurl.com/doq18z" rel="nofollow" target="_blank">mailing list</a>.
+</p>
+
+        </div>
+    </body>
+</html>

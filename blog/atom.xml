@@ -6,10 +6,88 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 03 Apr 2018 10:46:17 +0000</lastBuildDate>
+        <lastBuildDate>Sat, 21 Apr 2018 10:23:35 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
+        
+        <item>
+            <title>How malloc gets memory from the OS</title>
+            <link>http://www.sagargv.com/blog/how-malloc-gets-memory-from-os/</link>
+            <pubDate>Sun, 22 Apr 2018 00:00:00 +0000</pubDate>
+
+            <guid>http://www.sagargv.com/blog/how-malloc-gets-memory-from-os/</guid>
+            <description><![CDATA[
+<p>In the old days of 8086, 16-bit programs accessed physical memory directly.
+This would be valid code and would work:</p>
+<pre><code>int main()
+{
+    int *p = (int *)0x02ad;
+    return *p;
+}
+</code></pre>
+
+<p>x86 processors still boot into 16-bit real mode where this is fine, but the
+OS switches the processor into protected mode which enables virtual memory.
+Once virtual memory is enabled, each process has its own virtual memory
+that the OS has to map (to physical memory, files on the hard drive, device registers, etc.).
+If the program tries to access unmapped memory, a segfault happens.</p>
+<p>When Linux starts a process and loads the executable to memory, the layout of
+the virtual address space looks something like this:</p>
+<pre><code>---------------
+|             |
+|    stack    |
+|             |
+--------------- 0x7ffc725866b4
+|             |
+|             |
+|             |
+|   unmapped  |
+|    space    |
+|             |
+|             |
+|             |
+--------------- 0x000001773000
+|             |
+| data (bss)  |
+|             |
+---------------
+|             |
+|    data     |
+|             |
+---------------
+|             |
+|    text     |
+|             |
+---------------
+</code></pre>
+
+<p>The <code>text</code> segment contains the binary code of the executable, the <code>data</code> segment
+has initialized static variables, the <code>bss</code> segment has uninitialized static variables
+(zeroed out before main() function is called), and the <code>stack</code> segment contains the stack
+(There's also space for the environment variables, and the OS kernel space is also mapped
+for performance reasons, but I've skipped these in the diagram.) The adresses of 
+the these segments is randomized when the executable is loaded as a security measure (ASLR).</p>
+<p>When <code>malloc()</code> is called, it tries to allocate memory from previously freed memory that
+is still mapped to the process. But if there is insufficient free memory, <code>malloc()</code> must
+make one of these system calls to request the OS to map additional memory:</p>
+<ul>
+<li>
+<p>The <code>brk</code> / <code>sbrk</code> system calls enlarge the data segment. In the diagram above, calling <code>sbrk(8)</code>
+would move the end of the data segment from <code>0x1773000</code> to <code>0x1773008</code>. If the process wants
+to free the memory and return it to the OS, the data segment can be shrunk with the same syscalls.</p>
+</li>
+<li>
+<p>The <code>mmap</code> syscall can map pages anywhere in the virtual address space (the equivalent syscall
+in Windows is <code>VirtualAlloc</code>).</p>
+</li>
+</ul>
+<p>The <code>malloc</code> implementation in glibc uses <code>sbrk</code> when it needs small amounts of memory (~32K) and <code>mmap</code>
+when it needs large amounts of memory. The reason <code>mmap</code> is preferred for large objects is to prevent
+losing too much memory to fragmentation in the data segment; if a small object is allocated with <code>sbrk</code>
+after a large object and then, if the large object is freed, that memory cannot be freed
+until the small object is freed as well.</p>]]></description>
+        </item>
         
         <item>
             <title>Host Your Own Private Git Repos</title>
