@@ -96,7 +96,8 @@ are a good starting point for SGD at test time. i.e.., gradient descent-ception.
 This is what the training loop looks like:</p>
 <pre><code>- randomly initialize network weights W
 for it in range(num_iterations):
-    - Sample a task from the training set
+    - Sample a task from the training set and get a few
+      labeled examples for that task
     - Compute loss L using current weights W
     - Wn = W - inner_lr * dL/dW
     - Compute loss Ln using tuned weights Wn
@@ -104,9 +105,10 @@ for it in range(num_iterations):
 </code></pre>
 
 <p>To compute the loss <code>Ln</code>, the tuned weights <code>Wn</code> are used.
-But, we need to find gradients with respect to the original
-weights <code>dLn/dW</code>. Computing this involves finding higher-order
-derivatives of the loss with respect to the original weights <code>W</code>.</p>
+But, notice that gradients of the loss with respect to the
+original weights <code>dLn/dW</code> are needed. Computing this involves
+finding higher-order derivatives of the loss with respect to the
+original weights <code>W</code>.</p>
 <p>At test time:</p>
 <pre><code>- Given trained weights W and a few examples of a new task
 - Compute loss L using weights W
@@ -239,7 +241,7 @@ for it in range(num_iterations):
 </code></pre>
 
 <p>Since we don't have labeled data in the source domain,
-we also learn a loss function <code>L_adap</code> parameterized by <code>W_adap</code>.</p>
+we must also learn a loss function <code>L_adap</code> parameterized by <code>W_adap</code>.</p>
 <p>At test time:</p>
 <pre><code>- Given trained weights (W, W_adap) and a few unlabeled
   examples of a new task
@@ -250,12 +252,13 @@ we also learn a loss function <code>L_adap</code> parameterized by <code>W_adap<
   the target domain
 </code></pre>
 
-<p>Once again, let's try learning to generate sine waves from only 4
-example points. But this time, the phase of the sine wave desired
+<p>Once again, let's try learning to generate sine waves.
+But this time, the phase of the sine wave desired
 is going to be the input! A large (and contrived) domain shift
 from the usual input of x-coordinate to the network! During test time,
-the desired phase is presented and the network paramters must be
-adjusted so that it can predict a sine wave of that phase.</p>
+the desired phase is presented (in place of the x-coordinate) and the
+network paramters must be adjusted so that it can subsequently predict
+a sine wave of that phase.</p>
 <pre><code>import math
 import random
 import torch # v0.4.1

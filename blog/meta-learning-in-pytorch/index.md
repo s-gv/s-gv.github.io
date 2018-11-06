@@ -33,7 +33,8 @@ This is what the training loop looks like:
 ```
 - randomly initialize network weights W
 for it in range(num_iterations):
-    - Sample a task from the training set
+    - Sample a task from the training set and get a few
+      labeled examples for that task
     - Compute loss L using current weights W
     - Wn = W - inner_lr * dL/dW
     - Compute loss Ln using tuned weights Wn
@@ -41,9 +42,10 @@ for it in range(num_iterations):
 ```
 
 To compute the loss `Ln`, the tuned weights `Wn` are used.
-But, we need to find gradients with respect to the original
-weights `dLn/dW`. Computing this involves finding higher-order
-derivatives of the loss with respect to the original weights `W`.
+But, notice that gradients of the loss with respect to the
+original weights `dLn/dW` are needed. Computing this involves
+finding higher-order derivatives of the loss with respect to the
+original weights `W`.
 
 At test time:
 
@@ -186,7 +188,7 @@ for it in range(num_iterations):
 ```
 
 Since we don't have labeled data in the source domain,
-we also learn a loss function `L_adap` parameterized by `W_adap`.
+we must also learn a loss function `L_adap` parameterized by `W_adap`.
 
 At test time:
 
@@ -200,12 +202,13 @@ At test time:
   the target domain
 ```
 
-Once again, let's try learning to generate sine waves from only 4
-example points. But this time, the phase of the sine wave desired
+Once again, let's try learning to generate sine waves.
+But this time, the phase of the sine wave desired
 is going to be the input! A large (and contrived) domain shift
 from the usual input of x-coordinate to the network! During test time,
-the desired phase is presented and the network paramters must be
-adjusted so that it can predict a sine wave of that phase.
+the desired phase is presented (in place of the x-coordinate) and the
+network paramters must be adjusted so that it can subsequently predict
+a sine wave of that phase.
 
 ```
 import math
