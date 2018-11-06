@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            
+Meta Learning in PyTorch
+
+        </title>
+        
+<link rel="alternate" type="application/rss+xml" title="Sagar&#39;s blog" href="http://www.sagargv.com/blog/atom.xml" />
+
+        <style>
+        body {
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            line-height: 1.6;
+            margin-bottom: 50px;
+        }
+        .content {
+            max-width: 35em;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+        .nav {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:link, .nav a, .nav a:visited {
+            color: #07C;
+        }
+        a:hover, a:active, .nav a:visited:active, .nav a:visited:hover {
+            color: #3af;
+        }
+        a:visited {
+            color: #005999;
+        }
+        pre {
+            overflow-x: auto;
+            padding: 5px;
+            background-color: #eee;
+            max-height: 50em;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="nav">
+
+<a href="/">home</a> &middot;
+<a href="/blog/">blog</a> &middot;
+<a href="https://github.com/s-gv/">github</a> &middot;
+<a href="https://twitter.com/gv_sagar">twitter</a>
+
+        </div>
+        <div class="content">
+
+<h1>Meta Learning in PyTorch</h1>
+<p><em>Nov 7, 2018</em></p>
+<p>Got an image recognition problem? A pre-trained ResNet is
+probably a good starting point. Transfer learning, where
+the weights of a pre-trained network are fine tuned for the
+task at hand, is widely used because it can drastically reduce
+both the amount of data to be collected and the total time
+spent training the network. But ResNet wasn't trained
+with the intention of being a good starting point for transfer
+learning. It just so happens that it works well. But what if a
+network is trained specifically to obtain weights that are good
+for generalizing to a new task? That's what meta learning aims to do.</p>
+<p>The usual setting in meta learning involves a distribution of tasks.
+During training, a large number of tasks, but with only a few
+labeled examples per task, are available. At "test time", a new,
+previously unseen, task is provided with a few examples. Using only
+these few examples, the network must learn to generalize to new
+examples of the same task. In meta learning, this is accomplished
+by running a few steps of gradient descent on the examples of the new
+task provided during test. So, the goal of the training process
+is to discover similarities between tasks and find network weights that
+serve as a good starting point for gradient descent at test time on a
+new task.</p>
+<h2>Model Agnostic Meta Learning (MAML)</h2>
+<p><a href="https://arxiv.org/abs/1703.03400">MAML</a> differentiates through the
+stochastic gradient descent (SGD) update steps and learns weights that
+are a good starting point for SGD at test time. i.e.., gradient descent-ception.
+This is what the training loop looks like:</p>
+<pre><code>- randomly initialize network weights W
+for _ in range(num_iterations):
+    - Sample a task from the training set
+    - Compute loss L using current weights W
+    - Wn = W - inner_lr * dL/dW
+    - Compute loss Ln using tuned weights Wn
+    - Update W = W - outer_lr * dLn/dW
+</code></pre>
+
+<p>At test time:</p>
+<pre><code>- Given trained weights W and a few examples of a new task
+- Compute loss L using weights W
+- Wn = W - inner_lr * dL/dW
+- Use Wn to make predictions for that task
+</code></pre>
+
+<p>Let's try learning to generate a sine wave from only 4 data points.
+To keep it simple, let's fix the amplitude and frequency but randomly
+select the phase between 0 and 180 degrees. At test time, the model
+must figure out what the phase is and generate the sine wave from
+only 4 example data points.</p>
+<pre><code>import math
+import random
+import torch # v0.4.1
+from torch import nn
+from torch.nn import functional as F
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+
+def net(x, params):
+    x = F.linear(x, params[0], params[1])
+    x = F.relu(x)
+
+    x = F.linear(x, params[2], params[3])
+    x = F.relu(x)
+
+    x = F.linear(x, params[4], params[5])
+    return x
+
+params = [
+    torch.Tensor(32, 1).uniform_(-1., 1.).requires_grad_(),
+    torch.Tensor(32).zero_().requires_grad_(),
+
+    torch.Tensor(32, 32).uniform_(-1./math.sqrt(32), 1./math.sqrt(32)).requires_grad_(),
+    torch.Tensor(32).zero_().requires_grad_(),
+
+    torch.Tensor(1, 32).uniform_(-1./math.sqrt(32), 1./math.sqrt(32)).requires_grad_(),
+    torch.Tensor(1).zero_().requires_grad_(),
+]
+
+opt = torch.optim.SGD(params, lr=1e-2)
+n_inner_loop = 5
+alpha = 3e-2
+
+for it in range(275000):
+    b = 0 if random.choice([True, False]) else math.pi
+
+    x = torch.rand(4, 1)*4*math.pi - 2*math.pi
+    y = torch.sin(x + b)
+
+    v_x = torch.rand(4, 1)*4*math.pi - 2*math.pi
+    v_y = torch.sin(v_x + b)
+
+    opt.zero_grad()
+
+    new_params = params
+    for k in range(n_inner_loop):
+        f = net(x, new_params)
+        loss = F.l1_loss(f, y)
+
+        # create_graph=True because computing grads here is part of the forward pass.
+        # We want to differentiate through the SGD update steps and get higher order
+        # derivatives in the backward pass.
+        grads = torch.autograd.grad(loss, new_params, create_graph=True)
+        new_params = [(new_params[i] - alpha*grads[i]) for i in range(len(params))]
+
+        if it % 100 == 0: print 'Iteration %d -- Inner loop %d -- Loss: %.4f' % (it, k, loss)
+
+    v_f = net(v_x, new_params)
+    loss2 = F.l1_loss(v_f, v_y)
+    loss2.backward()
+
+    opt.step()
+
+    if it % 100 == 0: print 'Iteration %d -- Outer Loss: %.4f' % (it, loss2)
+
+t_b = math.pi #0
+
+t_x = torch.rand(4, 1)*4*math.pi - 2*math.pi
+t_y = torch.sin(t_x + t_b)
+
+opt.zero_grad()
+
+t_params = params
+for k in range(n_inner_loop):
+    t_f = net(t_x, t_params)
+    t_loss = F.l1_loss(t_f, t_y)
+
+    grads = torch.autograd.grad(t_loss, t_params, create_graph=True)
+    t_params = [(t_params[i] - alpha*grads[i]) for i in range(len(params))]
+
+
+test_x = torch.arange(-2*math.pi, 2*math.pi, step=0.01).unsqueeze(1)
+test_y = torch.sin(test_x + t_b)
+
+test_f = net(test_x, t_params)
+
+plt.plot(test_x.data.numpy(), test_y.data.numpy(), label='sin(x)')
+plt.plot(test_x.data.numpy(), test_f.data.numpy(), label='net(x)')
+plt.plot(t_x.data.numpy(), t_y.data.numpy(), 'o', label='Examples')
+plt.legend()
+plt.savefig('maml-sine.png')
+</code></pre>
+
+<p>Here is the sine wave the network constructs after looking at
+only 4 points at test time:</p>
+<p><a href="maml-sine.png"><img alt="MAML Demo" src="maml-sine-crushed.png"></a></p>
+<p>There's a variant of the MAML algorithm called FO-MAML (first-order MAML)
+that ignores higher-order derivatives.
+<a href="https://arxiv.org/abs/1803.02999">Reptile</a> is a similar algorithm
+proposed by OpenAI that's simpler to implement. Check out their
+<a href="https://blog.openai.com/reptile/">javascript demo</a>.</p>
+<h2>Domain Adaptive Meta Learning (DAML)</h2>
+<p>So what if...</p>
+<hr>
+<p>
+    Want to get notified of new blog posts?
+    Subscribe to the <a href="/blog/atom.xml">rss</a> feed or
+    join the <a href="http://eepurl.com/doq18z" rel="nofollow" target="_blank">mailing list</a>.
+</p>
+
+        </div>
+    </body>
+</html>
