@@ -95,7 +95,7 @@ stochastic gradient descent (SGD) update steps and learns weights that
 are a good starting point for SGD at test time. i.e.., gradient descent-ception.
 This is what the training loop looks like:</p>
 <pre><code>- randomly initialize network weights W
-for _ in range(num_iterations):
+for it in range(num_iterations):
     - Sample a task from the training set
     - Compute loss L using current weights W
     - Wn = W - inner_lr * dL/dW
@@ -103,6 +103,10 @@ for _ in range(num_iterations):
     - Update W = W - outer_lr * dLn/dW
 </code></pre>
 
+<p>To compute the loss <code>Ln</code>, the tuned weights <code>Wn</code> are used.
+But, we need to find gradients with respect to the original
+weights <code>dLn/dW</code>. Computing this involves finding higher-order
+derivatives of the loss with respect to the original weights <code>W</code>.</p>
 <p>At test time:</p>
 <pre><code>- Given trained weights W and a few examples of a new task
 - Compute loss L using weights W
@@ -218,7 +222,155 @@ that ignores higher-order derivatives.
 proposed by OpenAI that's simpler to implement. Check out their
 <a href="https://blog.openai.com/reptile/">javascript demo</a>.</p>
 <h2>Domain Adaptive Meta Learning (DAML)</h2>
-<p>So what if...</p>
+<p><a href="https://arxiv.org/abs/1802.01557">DAML</a> uses meta learning to
+tune the parameters of the network to accommodate large domain
+shifts in the input. This method also doesn't need labels in
+the source domain! This is the training loop of DAML:</p>
+<pre><code>- randomly initialize network weights W and the adaptation
+  loss network weights W_adap
+for it in range(num_iterations):
+    - Sample a task from the training set
+    - Compute adaptation loss (L_adap) using (W, W_adap) and 
+      unlabeled training data in the source domain
+    - Wn = W - inner_lr * dL_adap/dW
+    - Compute training loss (L) from labeled training data
+      in the target domain using the tuned weights Wn
+    - (W, W_adap) = (W, W_adap) - outer_lr * dL/d(W, W_adap)
+</code></pre>
+
+<p>Since we don't have labeled data in the source domain,
+we also learn a loss function <code>L_adap</code> parameterized by <code>W_adap</code>.</p>
+<p>At test time:</p>
+<pre><code>- Given trained weights (W, W_adap) and a few unlabeled
+  examples of a new task
+- Compute adaptation loss (L_adap) using weights (W, W_adap) and
+  unlabeled examples in the source domain
+- Wn = W - inner_lr * dL_adap/dW
+- Use Wn to make predictions for that task for inputs in
+  the target domain
+</code></pre>
+
+<p>Once again, let's try learning to generate sine waves from only 4
+example points. But this time, the phase of the sine wave desired
+is going to be the input! A large (and contrived) domain shift
+from the usual input of x-coordinate to the network! During test time,
+the desired phase is presented and the network paramters must be
+adjusted so that it can predict a sine wave of that phase.</p>
+<pre><code>import math
+import random
+import torch # v0.4.1
+from torch import nn
+from torch.nn import functional as F
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+
+def net(x, params):
+    x = F.linear(x, params[0], params[1])
+    x1 = F.relu(x)
+
+    x = F.linear(x1, params[2], params[3])
+    x2 = F.relu(x)
+
+    y = F.linear(x2, params[4], params[5])
+
+    return y, x2, x1
+
+def adap_net(y, x2, x1, params):
+    x = torch.cat([y, x2, x1], dim=1)
+
+    x = F.linear(x, params[0], params[1])
+    x = F.relu(x)
+
+    x = F.linear(x, params[2], params[3])
+    x = F.relu(x)
+
+    x = F.linear(x, params[4], params[5])
+
+    return x
+
+params = [
+    torch.Tensor(32, 1).uniform_(-1., 1.).requires_grad_(),
+    torch.Tensor(32).zero_().requires_grad_(),
+
+    torch.Tensor(32, 32).uniform_(-1./math.sqrt(32), 1./math.sqrt(32)).requires_grad_(),
+    torch.Tensor(32).zero_().requires_grad_(),
+
+    torch.Tensor(1, 32).uniform_(-1./math.sqrt(32), 1./math.sqrt(32)).requires_grad_(),
+    torch.Tensor(1).zero_().requires_grad_(),
+]
+
+adap_params = [
+    torch.Tensor(32, 1+32+32).uniform_(-1./math.sqrt(65), 1./math.sqrt(65)).requires_grad_(),
+    torch.Tensor(32).zero_().requires_grad_(),
+
+    torch.Tensor(32, 32).uniform_(-1./math.sqrt(32), 1./math.sqrt(32)).requires_grad_(),
+    torch.Tensor(32).zero_().requires_grad_(),
+
+    torch.Tensor(1, 32).uniform_(-1./math.sqrt(32), 1./math.sqrt(32)).requires_grad_(),
+    torch.Tensor(1).zero_().requires_grad_(),
+]
+
+opt = torch.optim.SGD(params + adap_params, lr=1e-2)
+n_inner_loop = 5
+alpha = 3e-2
+
+for it in range(275000):
+    b = 0 if random.choice([True, False]) else math.pi
+
+    v_x = torch.rand(4, 1)*4*math.pi - 2*math.pi
+    v_y = torch.sin(v_x + b)
+
+    opt.zero_grad()
+
+    new_params = params
+    for k in range(n_inner_loop):
+        f, f2, f1 = net(torch.FloatTensor([[1 if b &gt; 0 else -1]]), new_params)
+        h = adap_net(f, f2, f1, adap_params)
+        adap_loss = F.l1_loss(h, torch.zeros(1, 1))
+
+        # create_graph=True because computing grads here is part of the forward pass.
+        # We want to differentiate through the SGD update steps and get higher order
+        # derivatives in the backward pass.
+        grads = torch.autograd.grad(adap_loss, new_params, create_graph=True)
+        new_params = [(new_params[i] - alpha*grads[i]) for i in range(len(params))]
+
+        if it % 100 == 0: print 'Iteration %d -- Inner loop %d -- Loss: %.4f' % (it, k, adap_loss)
+
+    v_f, _, _ = net(v_x, new_params)
+    loss = F.l1_loss(v_f, v_y)
+    loss.backward()
+
+    opt.step()
+
+    if it % 100 == 0: print 'Iteration %d -- Outer Loss: %.4f' % (it, loss)
+
+t_b = math.pi # 0
+
+opt.zero_grad()
+
+t_params = params
+for k in range(n_inner_loop):
+    t_f, t_f2, t_f1 = net(torch.FloatTensor([[1 if t_b &gt; 0 else -1]]), t_params)
+    t_h = adap_net(t_f, t_f2, t_f1, adap_params)
+    t_adap_loss = F.l1_loss(t_h, torch.zeros(1, 1))
+
+    grads = torch.autograd.grad(t_adap_loss, t_params, create_graph=True)
+    t_params = [(t_params[i] - alpha*grads[i]) for i in range(len(params))]
+
+test_x = torch.arange(-2*math.pi, 2*math.pi, step=0.01).unsqueeze(1)
+test_y = torch.sin(test_x + t_b)
+
+test_f, _, _ = net(test_x, t_params)
+
+plt.plot(test_x.data.numpy(), test_y.data.numpy(), label='sin(x)')
+plt.plot(test_x.data.numpy(), test_f.data.numpy(), label='net(x)')
+plt.legend()
+plt.savefig('daml-sine.png')
+</code></pre>
+
+<p>This is the sine wave contructed by the network after domain adaptation:</p>
+<p><a href="daml-sine.png"><img alt="DAML Demo" src="daml-sine-crushed.png"></a></p>
 <hr>
 <p>
     Want to get notified of new blog posts?
