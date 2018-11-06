@@ -182,9 +182,9 @@ for it in range(num_iterations):
     - Compute adaptation loss (L_adap) using (W, W_adap) and 
       unlabeled training data in the source domain
     - Wn = W - inner_lr * dL_adap/dW
-    - Compute training loss (L) from labeled training data
+    - Compute training loss (Ln) from labeled training data
       in the target domain using the tuned weights Wn
-    - (W, W_adap) = (W, W_adap) - outer_lr * dL/d(W, W_adap)
+    - (W, W_adap) = (W, W_adap) - outer_lr * dLn/d(W, W_adap)
 ```
 
 Since we don't have labeled data in the source domain,
@@ -198,7 +198,7 @@ At test time:
 - Compute adaptation loss (L_adap) using weights (W, W_adap) and
   unlabeled examples in the source domain
 - Wn = W - inner_lr * dL_adap/dW
-- Use Wn to make predictions for that task for inputs in
+- Use Wn to make predictions for that task for new inputs in
   the target domain
 ```
 
