@@ -325,7 +325,7 @@ opt.zero_grad()
 
 t_params = params
 for k in range(n_inner_loop):
-    t_f, t_f2, t_f1 = net(torch.FloatTensor([[random.uniform(math.pi/4, math.pi/2) if b == 0 else random.uniform(-math.pi/2, -math.pi/4)]]), t_params)
+    t_f, t_f2, t_f1 = net(torch.FloatTensor([[random.uniform(math.pi/4, math.pi/2) if t_b == 0 else random.uniform(-math.pi/2, -math.pi/4)]]), t_params)
     t_h = adap_net(t_f, t_f2, t_f1, adap_params)
     t_adap_loss = F.l1_loss(t_h, torch.zeros(1, 1))
 
