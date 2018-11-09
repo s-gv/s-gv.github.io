@@ -172,7 +172,20 @@ proposed by OpenAI that's simpler to implement. Check out their
 [DAML](https://arxiv.org/abs/1802.01557) uses meta learning to
 tune the parameters of the network to accommodate large domain
 shifts in the input. This method also doesn't need labels in
-the source domain! This is the training loop of DAML:
+the source domain!
+
+Consider a neural network that takes `x` as
+input and produces `y = net(x)`. The source domain is a distribution
+from which the input `x` maybe drawn from. Likewise, the target
+domain is another distribution of inputs. Domain
+adaptation is what has to be done to get the network to work
+when the distribution of the input is changed from the source
+domain to the target domain. The idea in DAML is to use meta learning
+to tune the weights of the network based on examples in the source
+domain so that the network can do well on examples drawn from the
+target domain. During training, unlabeled examples from the source
+domain and the corresponding examples with labels in the target domain
+are available. This is the training loop of DAML:
 
 ```
 - randomly initialize network weights W and the adaptation
@@ -203,12 +216,18 @@ At test time:
 ```
 
 Once again, let's try learning to generate sine waves.
-But this time, the phase of the sine wave desired
-is going to be the input! A large (and contrived) domain shift
-from the usual input of x-coordinate to the network! During test time,
-the desired phase is presented (in place of the x-coordinate) and the
-network paramters must be adjusted so that it can subsequently predict
-a sine wave of that phase.
+In the target domain, the input, `x`, to the network is drawn from a
+uniform distribution `[-2*PI, 2*PI]`, and the network has to
+predict `y = sin(x)` or `y = sin(x + PI)`. Whether the network must
+predict `y = sin(x)` or `y = sin(x + PI)` has to be inferred from a single
+unlabeled input in the source domain. In the source domain, the input, `x`,
+to the network will be drawn uniformly from `[PI/4, PI/2]` to specify that
+zero phase is what we want and an input drawn from `[-PI/2, -PI/4]` shall
+specify that a 180 degree phase is desired. The source domain input is used
+to find gradients of weights with respect to the learnt adaptation loss,
+and a few steps of gradient descent tunes the weights of the network. Once
+we have the tuned weights, they can be used in the target domain to
+predict a sine wave of the desired phase.
 
 ```
 import math
@@ -280,7 +299,7 @@ for it in range(275000):
 
     new_params = params
     for k in range(n_inner_loop):
-        f, f2, f1 = net(torch.FloatTensor([[1 if b > 0 else -1]]), new_params)
+        f, f2, f1 = net(torch.FloatTensor([[random.uniform(math.pi/4, math.pi/2) if b == 0 else random.uniform(-math.pi/2, -math.pi/4)]]), new_params)
         h = adap_net(f, f2, f1, adap_params)
         adap_loss = F.l1_loss(h, torch.zeros(1, 1))
 
@@ -306,7 +325,7 @@ opt.zero_grad()
 
 t_params = params
 for k in range(n_inner_loop):
-    t_f, t_f2, t_f1 = net(torch.FloatTensor([[1 if t_b > 0 else -1]]), t_params)
+    t_f, t_f2, t_f1 = net(torch.FloatTensor([[random.uniform(math.pi/4, math.pi/2) if b == 0 else random.uniform(-math.pi/2, -math.pi/4)]]), t_params)
     t_h = adap_net(t_f, t_f2, t_f1, adap_params)
     t_adap_loss = F.l1_loss(t_h, torch.zeros(1, 1))
 
