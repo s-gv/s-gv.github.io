@@ -74,14 +74,15 @@ on the screen and decide whether to go up or down?</p>
 <p><a href="atari-pong.jpg"><img alt="Atari Pong" src="atari-pong-crushed.jpg"></a></p>
 <p>Unlike supervised learning, no labels are available. So, we turn to reinforcement learning.
 Policy gradients are one way to update the weights of the network
-to maximize the reward. The idea is to start with random initialization, i.e., the network predicts 50% probability
+to maximize the reward. The idea is to start with random initialization, i.e., the network predicts about 50% probability
 for both up and down regardless of the observation and to roll out the policy (play the game).
 At each time step, the network looks at the frame and predicts the probability of going up and down.
 We sample from this distribution and take the sampled action. At the end of the episode, the weights of
 the network are updated to increase the probability of taking a certain action if that action led to a positive reward
 and decrease the probability of taking an action if it led to a negative reward. This is how plain policy gradient works.
-It is similar to supervised learning, but with each sample in the loss function weighted by the reward for that episode (the
-labels are the actions that were sampled during the policy roll out).</p>
+It is similar to supervised learning, but with each sample in the cross entropy loss function weighted by the reward for that episode (the
+labels are the actions that were sampled during the policy roll out). Here's the math:</p>
+<p><a href="pg-eqn.png"><img alt="Policy Gradient Equations" src="pg-eqn-crushed.png"></a></p>
 <p>Policy gradients as described above suffers from the problem that the weight update after a policy roll out might
 change the probability of taking a certain action by a large amount. This is undesirable because the gradients are noisy
 and making large changes to the network after every policy roll out causes convergence problems. Why not reduce the step size?
