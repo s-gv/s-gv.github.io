@@ -1,6 +1,6 @@
 Learning to play Pong using PPO in PyTorch
 ==========================================
-*May 23, 2018*
+*May 23, 2019*
 
 The rules of Atari Pong are simple enough. You get a point if you put the ball past your opponent, and
 your opponent gets a point if the ball goes past you. How do we train a neural network to look at the pixels

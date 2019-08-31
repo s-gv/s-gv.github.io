@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            
+Variational Video Prediction
+
+        </title>
+        
+<link rel="alternate" type="application/rss+xml" title="Sagar&#39;s blog" href="http://www.sagargv.com/blog/atom.xml" />
+
+        <style>
+        body {
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            line-height: 1.6;
+            margin-bottom: 50px;
+        }
+        .content {
+            max-width: 35em;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+        .nav {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:link, .nav a, .nav a:visited {
+            color: #07C;
+        }
+        a:hover, a:active, .nav a:visited:active, .nav a:visited:hover {
+            color: #3af;
+        }
+        a:visited {
+            color: #005999;
+        }
+        pre {
+            overflow-x: auto;
+            padding: 5px;
+            background-color: #eee;
+            max-height: 50em;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="nav">
+
+<a href="/">home</a> &middot;
+<a href="/blog/">blog</a> &middot;
+<a href="https://github.com/s-gv/">github</a> &middot;
+<a href="https://twitter.com/gv_sagar">twitter</a>
+
+        </div>
+        <div class="content">
+
+<h1>Variational Video Prediction</h1>
+<p><em>Sep 1, 2019</em></p>
+<p>Just like how your smartphone's keyboard can predict the next word
+you're likely to type based on the last few words you entered, one can
+predict future frames of a video by looking at the current frame.
+This is really useful in <a href="https://arxiv.org/abs/1605.07157">model based re-inforcement learning</a>
+where you give an agent the ability to predict the future and plan a sequence of
+actions based on those predictions.
+It helps to dramatically cut down the number of samples needed for training.</p>
+<p><a href="det.png"><img alt="Neural video predictor" src="det-crushed.png"></a></p>
+<p>But there is a problem. What if the dynamics of the environment has some
+randomness or things you cannot easily model? When you push a pen across
+the table, it might move a little faster because you applied more force than you intended to.
+Sometimes the pen moves by 1 cm, sometimes 1.5 cm and so on. If a deterministic neural
+network is used to model this phenomenon (you try to minimize the least squares error),
+the randomness is modeled as blur. The network averages out the different possible
+outcomes. This is problematic because the blur gets worse the further you predict into the future.</p>
+<p><a href="detvar.png"><img alt="Variational Predictor" src="detvar-crushed.png"></a></p>
+<p>Variational inference can address this problem. Suppose that the white square in the picture
+can move by either 2 px or 3 px in one frame. If we're told at training time whether the pixel
+moved by 2 px or 3 px (via a one-hot vector), this can be an additional input to the network.
+With this, the neural network can learn to move the white square by the right number of pixels without any blur.
+During inference, the one-hot vector can be chosen randomly, which would result in the white square
+moving by either 2 px or 3 px. But we don't actually know by how many pixels the white square
+moved during training. Another neural network to the rescue! This encoder network looks at the input and
+the label and predicts the probability of choosing either of the one-hot vectors as input to the video predictor.
+The <a href="https://arxiv.org/abs/1611.01144">gumbel-softmax reparametrization</a> can be used to sample from this
+distribution during training.</p>
+<p>The code for this network in Keras is <a href="var_translate_pred.py">here</a>.</p>
+<hr>
+<p>
+    Want to get notified of new blog posts?
+    Subscribe to the <a href="/blog/atom.xml">rss</a> feed or
+    join the <a href="http://eepurl.com/doq18z" rel="nofollow" target="_blank">mailing list</a>.
+</p>
+
+        </div>
+    </body>
+</html>
