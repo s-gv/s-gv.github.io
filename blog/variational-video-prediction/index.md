@@ -21,10 +21,11 @@ outcomes. This is problematic because the blur gets worse the further you predic
 
 ![Variational Predictor](detvar.png)
 
-Variational inference can address this problem. Suppose that the white square in the picture
-can move by either 2 px or 3 px in one frame. If we're told at training time whether the pixel
-moved by 2 px or 3 px (via a one-hot vector), this can be an additional input to the network.
-With this, the neural network can learn to move the white square by the right number of pixels without any blur.
+[Variational inference](https://arxiv.org/abs/1710.11252) can address this problem.
+Suppose that the white square in the picture can move by either 2 px or 3 px in one frame.
+If we're told at training time whether the pixel moved by 2 px or 3 px (via a one-hot vector),
+this can be an additional input to the network. With this, the neural network can
+learn to move the white square by the right number of pixels without any blur.
 During inference, the one-hot vector can be chosen randomly, which would result in the white square
 moving by either 2 px or 3 px. But we don't actually know by how many pixels the white square
 moved during training. Another neural network to the rescue! This encoder network looks at the input and
