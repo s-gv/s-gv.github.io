@@ -5,7 +5,7 @@ Just like how your smartphone's keyboard can predict the next word
 you're likely to type based on the last few words you entered, one can
 predict future frames of a video by looking at the current frame.
 This is really useful in [model based re-inforcement learning](https://arxiv.org/abs/1605.07157)
-where you give an agent the ability to predict the future and plan a sequence of
+where it endows an agent with the ability to predict the future and plan a sequence of
 actions based on those predictions.
 It helps to dramatically cut down the number of samples needed for training.
 

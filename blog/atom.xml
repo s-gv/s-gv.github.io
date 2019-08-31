@@ -6,7 +6,7 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 31 Aug 2019 08:06:19 +0000</lastBuildDate>
+        <lastBuildDate>Sat, 31 Aug 2019 09:22:43 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
@@ -22,7 +22,7 @@
 you're likely to type based on the last few words you entered, one can
 predict future frames of a video by looking at the current frame.
 This is really useful in <a href="https://arxiv.org/abs/1605.07157">model based re-inforcement learning</a>
-where you give an agent the ability to predict the future and plan a sequence of
+where it endows an agent with the ability to predict the future and plan a sequence of
 actions based on those predictions.
 It helps to dramatically cut down the number of samples needed for training.</p>
 <p><img alt="Neural video predictor" src="det.png"></p>
