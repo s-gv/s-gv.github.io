@@ -2,7 +2,7 @@
 *[me@sagargv.com](mailto:me@sagargv.com)*
 
 I'm a PhD student advised by [Prof. Bharadwaj Amrutur](http://chips.ece.iisc.ernet.in/index.php/Bharadwaj_Amrutur) at the
-Indian Institute Of Science.  My current research is on natural scene text recognition.
+Indian Institute Of Science.  My current research is on data driven robotics.
 In a previous life, I worked on low-power circuits.
 
 ## Selected Projects
