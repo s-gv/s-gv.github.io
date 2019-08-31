@@ -12,7 +12,7 @@ def main():
         sys.exit(1)
 
     with open(sys.argv[1]) as f_ip:
-        content = markdown.markdown(f_ip.read(), extensions=['markdown.extensions.fenced_code'], output_format='html5')
+        content = markdown.markdown(f_ip.read(), extensions=['markdown.extensions.fenced_code', 'markdown.extensions.tables'], output_format='html5')
         for match in re.finditer(r'<img[^>]+src="([^"]+)"[^>]*>', content):
             img_tag = match.group(0)
             img_src = match.group(1)
