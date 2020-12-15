@@ -8,7 +8,7 @@ source code are [here](https://github.com/s-gv/cookoo).
 
 ## How does it work?
 
-![youtube](https://www.youtube.com/watch?v=_j1hrjZ27aw)
+![youtube](https://www.youtube.com/embed/_j1hrjZ27aw)
 
 Cookoo monitors the temperature of your cooker. When the cooker whistles, the
 pressure inside it falls rapidly. This causes a sharp decrease in temperature,
