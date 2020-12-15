@@ -5,7 +5,7 @@ I'm a PhD student advised by [Prof. Bharadwaj Amrutur](http://chips.ece.iisc.ern
 Indian Institute Of Science.  My current research is on data driven robotics.
 In a previous life, I worked on low-power circuits.
 
-## Selected Projects
+## Some Projects
 - [Good Old Web](https://www.goodoldweb.com) is a collection of open-source, slim webapps that make very little use of javascript.
 - [Kage](/kage/) is a 2D infinite running game where you play as a crow.
 - [Cookoo](/proj/cookoo/) is a device that keeps track of pressure cooker whistles.
