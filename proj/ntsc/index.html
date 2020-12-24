@@ -41,6 +41,8 @@ All Digital NTSC Color
         img {
             display: block;
             margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
         a {
             text-decoration: none;
@@ -81,12 +83,12 @@ NTSC color signal compatible with modern flat screen TVs. The schematic and
 source code are <a href="https://github.com/s-gv/ntsc-avr">here</a>.</p>
 <h2>What colors can it produce?</h2>
 <p>Below is a sample palette produced by this technique.</p>
-<p><a href="1.jpg"><img alt="Sample" width="600.0" height="450.0" src="1-crushed.jpg"></a></p>
+<p><a href="1.jpg"><img alt="Sample" width="3264" height="2448" src="1-crushed.jpg"></a></p>
 <h2>How to use</h2>
 <p>Build the circuit in the schematic below and program the microcontroller with
 the binary file in the <a href="https://github.com/s-gv/ntsc-avr/tree/master/bin">repository</a>.
 Hook it up to a TV, and you should see a color palette.</p>
-<p><a href="2.jpg"><img alt="Circuit" width="600.0" height="351.3" src="2-crushed.jpg"></a></p>
+<p><a href="2.jpg"><img alt="Circuit" width="3008" height="1761" src="2-crushed.jpg"></a></p>
 <h2>How does it work?</h2>
 <p>NTSC color works by superposing a 3.579545 MHz sub-carrier wave on top of the
 Black and White NTSC signal. The phase of the subcarrier indicates the color of

@@ -42,6 +42,8 @@ Variational Video Prediction
         img {
             display: block;
             margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
         a {
             text-decoration: none;
@@ -83,7 +85,7 @@ This is really useful in <a href="https://arxiv.org/abs/1605.07157">model based 
 where it endows an agent with the ability to predict the future and plan a sequence of
 actions based on those predictions.
 It helps to dramatically cut down the number of samples needed for training.</p>
-<p><a href="det.png"><img alt="Neural video predictor" width="600.0" height="99.9" src="det-crushed.png"></a></p>
+<p><a href="det.png"><img alt="Neural video predictor" width="1586" height="264" src="det-crushed.png"></a></p>
 <p>But there is a problem. What if the dynamics of the environment has some
 randomness or things you cannot easily model? When you push a pen across
 the table, it might move a little faster because you applied more force than you intended to.
@@ -91,7 +93,7 @@ Sometimes the pen moves by 1 cm, sometimes 1.5 cm and so on. If a deterministic 
 network is used to model this phenomenon (you try to minimize the least squares error),
 the randomness is modeled as blur. The network averages out the different possible
 outcomes. This is problematic because the blur gets worse the further you predict into the future.</p>
-<p><a href="detvar.png"><img alt="Variational Predictor" width="600.0" height="211.7" src="detvar-crushed.png"></a></p>
+<p><a href="detvar.png"><img alt="Variational Predictor" width="1584" height="559" src="detvar-crushed.png"></a></p>
 <p><a href="https://arxiv.org/abs/1710.11252">Variational inference</a> can address this problem.
 Suppose that the white square in the picture can move by either 2 px or 3 px in one frame.
 If we're told at training time whether the pixel moved by 2 px or 3 px (via a one-hot vector),
