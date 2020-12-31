@@ -5,6 +5,7 @@ join the <a href="http://eepurl.com/doq18z" rel="nofollow" target="_blank">maili
 
 |          |                                                                                   |
 |----------|-----------------------------------------------------------------------------------|
+| Dec 2020 | [How to read the query plan from Postgres EXPLAIN](/blog/how-to-read-postgres-explain/) |
 | Sep 2019 | [Variational Video Prediction](/blog/variational-video-prediction/) |
 | May 2019 | [Learning to play Pong using PPO in PyTorch](/blog/pong-ppo/) |
 | Nov 2018 | [Meta Learning in PyTorch](/blog/meta-learning-in-pytorch/) |
