@@ -6,7 +6,7 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 01 Jan 2021 04:23:53 +0000</lastBuildDate>
+        <lastBuildDate>Fri, 01 Jan 2021 10:15:41 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
@@ -14,7 +14,7 @@
         <item>
             <title>How to read a query plan from Postgres EXPLAIN</title>
             <link>http://www.sagargv.com/blog/how-to-read-postgres-explain/</link>
-            <pubDate>Thu, 31 Dec 2020 23:59:59 +0000</pubDate>
+            <pubDate>Thu, 31 Dec 2020 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/how-to-read-postgres-explain/</guid>
             <description><![CDATA[
@@ -179,7 +179,7 @@ condition using an index.</p>
         <item>
             <title>Variational Video Prediction</title>
             <link>http://www.sagargv.com/blog/variational-video-prediction/</link>
-            <pubDate>Sun, 01 Sep 2019 23:59:59 +0000</pubDate>
+            <pubDate>Sun, 01 Sep 2019 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/variational-video-prediction/</guid>
             <description><![CDATA[
@@ -216,7 +216,7 @@ distribution during training.</p>
         <item>
             <title>Learning to play Pong using PPO in PyTorch</title>
             <link>http://www.sagargv.com/blog/pong-ppo/</link>
-            <pubDate>Thu, 23 May 2019 23:59:59 +0000</pubDate>
+            <pubDate>Thu, 23 May 2019 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/pong-ppo/</guid>
             <description><![CDATA[
@@ -386,7 +386,7 @@ Here is a video of the agent playing (the agent controls the green paddle to the
         <item>
             <title>Meta Learning in PyTorch</title>
             <link>http://www.sagargv.com/blog/meta-learning-in-pytorch/</link>
-            <pubDate>Wed, 07 Nov 2018 23:59:59 +0000</pubDate>
+            <pubDate>Wed, 07 Nov 2018 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/meta-learning-in-pytorch/</guid>
             <description><![CDATA[
@@ -719,7 +719,7 @@ plt.savefig('daml-sine.png')
         <item>
             <title>How malloc gets memory from the OS</title>
             <link>http://www.sagargv.com/blog/how-malloc-gets-memory-from-os/</link>
-            <pubDate>Sun, 22 Apr 2018 23:59:59 +0000</pubDate>
+            <pubDate>Sun, 22 Apr 2018 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/how-malloc-gets-memory-from-os/</guid>
             <description><![CDATA[
@@ -797,7 +797,7 @@ until the small object is freed as well.</p>]]></description>
         <item>
             <title>Host Your Own Private Git Repos</title>
             <link>http://www.sagargv.com/blog/host-your-own-private-git-repos/</link>
-            <pubDate>Sat, 31 Mar 2018 23:59:59 +0000</pubDate>
+            <pubDate>Sat, 31 Mar 2018 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/host-your-own-private-git-repos/</guid>
             <description><![CDATA[
@@ -938,7 +938,7 @@ server {
         <item>
             <title>Pagination in SQL</title>
             <link>http://www.sagargv.com/blog/sql-pagination/</link>
-            <pubDate>Sun, 27 Aug 2017 23:59:59 +0000</pubDate>
+            <pubDate>Sun, 27 Aug 2017 23:59:59 PST</pubDate>
 
             <guid>http://www.sagargv.com/blog/sql-pagination/</guid>
             <description><![CDATA[

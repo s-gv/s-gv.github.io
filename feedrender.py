@@ -26,7 +26,7 @@ def main():
             desc = desc.group(1)
             item = {
                 'title': title,
-                'pub_date': pub_date.strftime("%a, %d %b %Y") + " 23:59:59 +0000",
+                'pub_date': pub_date.strftime("%a, %d %b %Y") + " 23:59:59 PST",
                 'pub_time': pub_date,
                 'desc': '<![CDATA['+desc+']]>',
                 'link': base_url + "/blog/" + blog + "/"
