@@ -1,4 +1,4 @@
-# How to read the query plan from Postgres EXPLAIN
+# How to read a query plan from Postgres EXPLAIN
 *Dec 31, 2020*
 
 Got a web app responding too slowly because of a database query?

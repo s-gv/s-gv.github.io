@@ -6,13 +6,13 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 31 Dec 2020 20:35:11 +0000</lastBuildDate>
+        <lastBuildDate>Fri, 01 Jan 2021 04:23:53 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
         
         <item>
-            <title>How to read the query plan from Postgres EXPLAIN</title>
+            <title>How to read a query plan from Postgres EXPLAIN</title>
             <link>http://www.sagargv.com/blog/how-to-read-postgres-explain/</link>
             <pubDate>Thu, 31 Dec 2020 23:59:59 +0000</pubDate>
 
