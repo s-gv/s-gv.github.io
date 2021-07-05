@@ -6,7 +6,7 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 05 Jul 2021 11:05:08 +0000</lastBuildDate>
+        <lastBuildDate>Mon, 05 Jul 2021 11:11:36 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
@@ -59,6 +59,7 @@
 <li><a href="https://colab.research.google.com/drive/1Wp-DZlgoNulS-sHneIX5kgSyVB26p_Mi?usp=sharing">One-shot sliding window object detector using Siamese net</a></li>
 <li><a href="https://colab.research.google.com/drive/1AGsrzDP1XXDgQrmRlYwx5xX4dWCRIUUP?usp=sharing">Differentiable one-shot object localization using Siamese net</a></li>
 <li><a href="https://colab.research.google.com/drive/1DSLi4Y7jWtl7YxO5hHSc-ojXRLm8stjm?usp=sharing">Differentiable one-shot object localization of object specified by visual cue using Siamese net</a></li>
+<li><a href="https://colab.research.google.com/drive/1fuxmgMBrvsOcA4_7uKgHWxhPORMuxmoj?usp=sharing">Differentiable localization in the presence of multiple instances of objects</a></li>
 </ul>]]></description>
         </item>
         
