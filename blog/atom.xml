@@ -6,10 +6,61 @@
         <description>Recent content on Sagar's blog</description>
         <generator>feedrender.py -- www.sagargv.com</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 01 Jan 2021 10:15:41 +0000</lastBuildDate>
+        <lastBuildDate>Mon, 05 Jul 2021 11:05:08 +0000</lastBuildDate>
 
         <atom:link href="http://www.sagargv.com/blog/atom.xml" rel="self" type="application/rss+xml" />
 
+        
+        <item>
+            <title>Reinforcement Learning with PyBullet in Colab</title>
+            <link>http://www.sagargv.com/blog/rl-with-pybullet/</link>
+            <pubDate>Tue, 06 Jul 2021 23:59:59 PST</pubDate>
+
+            <guid>http://www.sagargv.com/blog/rl-with-pybullet/</guid>
+            <description><![CDATA[
+<p>Some tutorials on reinforment inforcement learning in PyBullet using soft actor-critic with a simple custom robot that can move in only one plane:</p>
+<ul>
+<li><a href="https://colab.research.google.com/drive/1Ww-oKm-WTsH4PyBHGm5VMUCsD88bv9os?usp=sharing">2D Reacher - Reach a point on the table</a></li>
+<li><a href="https://colab.research.google.com/drive/1N8JrLelcV1jtJq61KeE5Gc7otIH0tzuI?usp=sharing">2D Pusher - Push an object on the table</a></li>
+<li><a href="https://colab.research.google.com/drive/1bumvdASL-GDqGirUngJjoZCtiw0yl2Kp?usp=sharing">2D Reacher from Pixels - Reach the marked point on the table</a></li>
+<li><a href="https://colab.research.google.com/drive/1N8JrLelcV1jtJq61KeE5Gc7otIH0tzuI?usp=sharing">2D Pusher with Inverse Kinematics - Push an object on the table</a></li>
+</ul>
+<p>This can serve as a template to get started with a custom robot and might help in debugging some learning algorithms that directly control the actuators of a robot.</p>]]></description>
+        </item>
+        
+        <item>
+            <title>Tutorials on using PyBullet in Colab</title>
+            <link>http://www.sagargv.com/blog/pybullet-colab-tutorials/</link>
+            <pubDate>Tue, 06 Jul 2021 23:59:59 PST</pubDate>
+
+            <guid>http://www.sagargv.com/blog/pybullet-colab-tutorials/</guid>
+            <description><![CDATA[
+<p>Some tutorials on using PyBullet in Google Colab:</p>
+<ul>
+<li><a href="https://colab.research.google.com/drive/1bLYj1s8oiOxtEc3T4UTgXk-wLpE_nDui?usp=sharing">Intro to inverse kinematics in PyBullet with the Kuka robot</a></li>
+<li><a href="https://colab.research.google.com/drive/1Xiwda3c5c4-5xY6c4ghtnrlhoYm2FYKn?usp=sharing">Pick and Place using virtual suction gripper on Kuka robot</a></li>
+<li><a href="https://colab.research.google.com/drive/1eXq-Tl3QKzmbXGSKU2hDk0u_EHdfKVd0?usp=sharing">Pick and Place using two fingered jaw gripper on Kuka robot</a></li>
+<li><a href="https://colab.research.google.com/drive/1w9U_vbLk4vIKyQKqgHgSjwqk-hoyiiyv?usp=sharing">Build your own robot with only one joint</a></li>
+<li><a href="https://colab.research.google.com/drive/1i6ITJn3aggzyJTCew1xXDRtyY9szvkr4?usp=sharing">How to build a simple custom robot that can move in only one plane</a></li>
+</ul>]]></description>
+        </item>
+        
+        <item>
+            <title>Tutorials on Computer Vision using Keras in Colab</title>
+            <link>http://www.sagargv.com/blog/cv-keras-tutorials/</link>
+            <pubDate>Tue, 06 Jul 2021 23:59:59 PST</pubDate>
+
+            <guid>http://www.sagargv.com/blog/cv-keras-tutorials/</guid>
+            <description><![CDATA[
+<p>Some tutorials on computer vision using Tensorflow / Keras in Colab:</p>
+<ul>
+<li><a href="https://colab.research.google.com/drive/1cAWKGPeFiXl4krIAEe24cVKeYNo_yAsW?usp=sharing">Plain old sliding window object detector</a></li>
+<li><a href="https://colab.research.google.com/drive/1xizq12Kw0O4bVyf5zGLUszsRqWj6QwcE?usp=sharing">Siamese net for one-shot image classification</a></li>
+<li><a href="https://colab.research.google.com/drive/1Wp-DZlgoNulS-sHneIX5kgSyVB26p_Mi?usp=sharing">One-shot sliding window object detector using Siamese net</a></li>
+<li><a href="https://colab.research.google.com/drive/1AGsrzDP1XXDgQrmRlYwx5xX4dWCRIUUP?usp=sharing">Differentiable one-shot object localization using Siamese net</a></li>
+<li><a href="https://colab.research.google.com/drive/1DSLi4Y7jWtl7YxO5hHSc-ojXRLm8stjm?usp=sharing">Differentiable one-shot object localization of object specified by visual cue using Siamese net</a></li>
+</ul>]]></description>
+        </item>
         
         <item>
             <title>How to read a query plan from Postgres EXPLAIN</title>
