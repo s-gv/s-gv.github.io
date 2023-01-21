@@ -7,9 +7,9 @@ from PIL import Image
 
 def main():
     if len(sys.argv) != 3:
-        print "Incorrent number of arguments.\n"
-        print "Usage: python pagerender.py input.md template.html > output.html"
-        print "Parse markdown and generate HTML."
+        print("Incorrent number of arguments.\n")
+        print("Usage: python pagerender.py input.md template.html > output.html")
+        print("Parse markdown and generate HTML.")
         sys.exit(1)
 
     with open(sys.argv[1]) as f_ip:
@@ -34,7 +34,7 @@ def main():
         else:
             title = 'Sagar Gubbi'
         rendered = jinja2.Environment(loader=jinja2.FileSystemLoader('./templates')).get_template(sys.argv[2]).render(content=content, title=title)
-        print rendered
+        print(rendered)
 
 if __name__ == '__main__':
     main()

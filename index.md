@@ -1,9 +1,7 @@
 # Sagar Gubbi
 *[me@sagargv.com](mailto:me@sagargv.com)*
 
-I'm a PhD student advised by [Prof. Bharadwaj Amrutur](http://chips.ece.iisc.ernet.in/index.php/Bharadwaj_Amrutur) at the
-Indian Institute Of Science.  My current research is on data driven robotics.
-In a previous life, I worked on low-power circuits.
+I'm a postdoctoral researcher advised by [Partha Talukdar](https://research.google/people/ParthaTalukdar/) at Google Research India. My current research is on helping novice users learn how to navigate the Android UI by leveraging large language models. In a previous life, I worked on low-power circuits and imitation learning for robots.
 
 ## Projects
 - [Good Old Web](https://www.goodoldweb.com) is a collection of open-source, slim webapps that make very little use of javascript.
