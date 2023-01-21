@@ -86,7 +86,6 @@ This would be valid code and would work:</p>
     return *p;
 }
 </code></pre>
-
 <p>x86 processors still boot into 16-bit real mode where this is fine, but the
 OS switches the processor into protected mode which enables virtual memory.
 Once virtual memory is enabled, each process has its own virtual memory
@@ -121,7 +120,6 @@ the virtual address space looks something like this:</p>
 |             |
 ---------------
 </code></pre>
-
 <p>The <code>text</code> segment contains the binary code of the executable, the <code>data</code> segment
 has initialized static variables, the <code>bss</code> segment has uninitialized static variables
 (zeroed out before main() function is called), and the <code>stack</code> segment contains the stack

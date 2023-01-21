@@ -84,27 +84,22 @@ Login to the server, create a new directory, and initialize a bare repo:</p>
 cd foo.git
 git init --bare
 </code></pre>
-
 <p>That's it! Now, from the client, clone this repo with:</p>
 <pre><code>git clone username@example.com:path/to/foo.git
 </code></pre>
-
 <p>Having a dedicated user for git repos on the server makes it easier share access to the repo.
 Create a new user <code>git</code> with a login shell restricted to git commands:</p>
 <pre><code>sudo adduser --shell $(which git-shell) git
 </code></pre>
-
 <p>Now create a repo in the home directory of the <code>git</code> user:</p>
 <pre><code>cd /home/git
 sudo -u git mkdir bar.git
 cd bar.git
 sudo -u git git init --bare
 </code></pre>
-
 <p>As before, clone the new repo from the client using:</p>
 <pre><code>git clone git@example.com:bar
 </code></pre>
-
 <h2>Backup the repos</h2>
 <p>This is my script to take daily backups of all the git repos on the server to Amazon S3.</p>
 <pre><code>#!/bin/bash
@@ -132,7 +127,6 @@ export AWS_DEFAULT_REGION=us-west-2
 
 aws s3 cp ${TMPDIR}/*.git.tar.gz s3://mygitbucket/
 </code></pre>
-
 <p>If the repos are large, it might be worthwhile checking whether
 the hash of the gzipped repo has changed before uploading.
 It's also good idea to use <code>envdir</code> to manage the access keys rather
@@ -145,7 +139,6 @@ reduces the administrative burden.</p>
 <p>Install cgit, nginx, fcgiwrap, and apache-tools (to create a <code>.htpasswd</code> file).</p>
 <pre><code>sudo apt install cgit nginx fcgiwrap apache2-utils
 </code></pre>
-
 <p>Specify the location of the git repos and static assets in the 
 <code>cgit</code> config at <code>/etc/cgitrc</code>.</p>
 <pre><code>css=/cgit-static/cgit.css
@@ -156,12 +149,10 @@ favicon=/cgit-static/favicon.ico
 
 scan-path=/home/git/
 </code></pre>
-
 <p>To get syntax highlighting, install <code>python-pygments</code> and uncomment the source-filter option.</p>
 <p>If you'd like to password protect access to <code>www.example.com/git/</code>, create a <code>.htpasswd</code> file:</p>
 <pre><code>sudo htpasswd /etc/nginx/.htpasswd &lt;username&gt;
 </code></pre>
-
 <p>This is my <code>nginx</code> conf file to serve <code>cgit</code> from <code>www.example.com/git/</code>.</p>
 <pre><code>server {
     listen 80;
@@ -208,7 +199,6 @@ server {
     }
 }
 </code></pre>
-
 <p>You might also want to restrict repo access to only whitelisted IPs.</p>
 <hr>
 <p>

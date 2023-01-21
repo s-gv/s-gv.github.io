@@ -113,7 +113,6 @@ for it in range(num_iterations):
     - Compute loss Ln using tuned weights Wn
     - Update W = W - outer_lr * dLn/dW
 </code></pre>
-
 <p>To compute the loss <code>Ln</code>, the tuned weights <code>Wn</code> are used.
 But, notice that gradients of the loss with respect to the
 original weights <code>dLn/dW</code> are needed. Computing this involves
@@ -125,7 +124,6 @@ original weights <code>W</code>.</p>
 - Wn = W - inner_lr * dL/dW
 - Use Wn to make predictions for that task
 </code></pre>
-
 <p>Let's try learning to generate a sine wave from only 4 data points.
 To keep it simple, let's fix the amplitude and frequency but randomly
 select the phase between 0 and 180 degrees. At test time, the model
@@ -224,7 +222,6 @@ plt.plot(t_x.data.numpy(), t_y.data.numpy(), 'o', label='Examples')
 plt.legend()
 plt.savefig('maml-sine.png')
 </code></pre>
-
 <p>Here is the sine wave the network constructs after looking at
 only 4 points at test time:</p>
 <p><a href="maml-sine.png"><img alt="MAML Demo" width="640" height="480" src="maml-sine-crushed.png"></a></p>
@@ -261,7 +258,6 @@ for it in range(num_iterations):
       in the target domain using the tuned weights Wn
     - (W, W_adap) = (W, W_adap) - outer_lr * dLn/d(W, W_adap)
 </code></pre>
-
 <p>Since we don't have labeled data in the source domain,
 we must also learn a loss function <code>L_adap</code> parameterized by <code>W_adap</code>.</p>
 <p>At test time:</p>
@@ -273,7 +269,6 @@ we must also learn a loss function <code>L_adap</code> parameterized by <code>W_
 - Use Wn to make predictions for that task for new inputs in
   the target domain
 </code></pre>
-
 <p>Once again, let's try learning to generate sine waves.
 In the target domain, the input, <code>x</code>, to the network is drawn from a
 uniform distribution <code>[-2*PI, 2*PI]</code>, and the network has to
@@ -399,7 +394,6 @@ plt.plot(test_x.data.numpy(), test_f.data.numpy(), label='net(x)')
 plt.legend()
 plt.savefig('daml-sine.png')
 </code></pre>
-
 <p>This is the sine wave contructed by the network after domain adaptation:</p>
 <p><a href="daml-sine.png"><img alt="DAML Demo" width="640" height="480" src="daml-sine-crushed.png"></a></p>
 <hr>

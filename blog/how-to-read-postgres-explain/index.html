@@ -92,14 +92,12 @@ To start off, let's run with a simple schema of three tables: (a) Users,
   1 | jon@example.com
   2 | Jane@example.com
 </code></pre>
-
 <pre><code>articles:
  id |    name
 ----+-------------
   1 | Playstation
   2 | Xbox
 </code></pre>
-
 <pre><code>orders:
  id | user_id | article_id | qty
 ----+---------+------------+-----
@@ -108,7 +106,6 @@ To start off, let's run with a simple schema of three tables: (a) Users,
   3 |       2 |          1 |   4
   4 |       2 |          2 |   3
 </code></pre>
-
 <p>Suppose we want to query the <code>users</code> table by the email address, the plan that
 postgres generates is:</p>
 <pre><code>EXPLAIN SELECT * FROM users WHERE email='jon@example.com';
@@ -116,7 +113,6 @@ postgres generates is:</p>
  Index Scan using users_email_index on users  (cost=0.15..8.17 rows=1 width=222)
    Index Cond: ((email)::text = 'jon@example.com'::text)
 </code></pre>
-
 <p>Since we have an index on the email column, postgres has decided to use that
 to search the users table. If we didn't have that index, it would do a sequential
 scan over the entire table:</p>
@@ -125,7 +121,6 @@ scan over the entire table:</p>
  Seq Scan on users  (cost=0.00..14.00 rows=2 width=222)
    Filter: ((email)::text = 'jon@example.com'::text)
 </code></pre>
-
 <p>To get all the orders of a user, the query plan is:</p>
 <pre><code> EXPLAIN SELECT *
     FROM orders
@@ -139,7 +134,6 @@ scan over the entire table:</p>
    -&gt;  Index Scan using orders_userid_index on orders  (cost=0.15..32.31 rows=9 width=16)
          Index Cond: (user_id = users.id)
 </code></pre>
-
 <p>What's going on here? First, postgres is using the index on the email column
 to search the users table for users for email jon@example.com.
 For each matching row (we expect a single matching row in this example),
@@ -149,7 +143,6 @@ Translated to pseudocode:</p>
     for order in orders.filter(user_id=user.id): # uses the userid index
         yield (user, order)
 </code></pre>
-
 <p>Now, let's try joining all the three tables to get the full details of all the orders of a user:</p>
 <pre><code>EXPLAIN SELECT *
     FROM orders
@@ -168,7 +161,6 @@ Translated to pseudocode:</p>
    -&gt;  Index Scan using articles_pkey on articles  (cost=0.15..0.19 rows=1 width=222)
          Index Cond: (id = orders.article_id)
 </code></pre>
-
 <p>This is similar to joining the two tables, but we have another loop to join the third table.
 In pseudocode, this is what's going on:</p>
 <pre><code>for user in users.filter(email='jon@example.com'): # uses the email index
@@ -176,7 +168,6 @@ In pseudocode, this is what's going on:</p>
         for article in articles.filter(id=order.article_id): # uses article_id primary key
             yield (user, order, article)
 </code></pre>
-
 <p>Instead of an index scan, you might come across a bitmap heap scan like this:</p>
 <pre><code> EXPLAIN SELECT *
     FROM orders
@@ -192,7 +183,6 @@ In pseudocode, this is what's going on:</p>
          -&gt;  Bitmap Index Scan on orders_userid_index  (cost=0.00..4.22 rows=9 width=0)
                Index Cond: (user_id = users.id)
 </code></pre>
-
 <p>In a plain index scan, postgres fetches a row pointer from the index and immediately
 fetches that row from the table. But with a bitmap index scan, all the tuple pointers
 that match the filtering condition are gathered and an in-memory bitmap data structure
@@ -224,7 +214,6 @@ query plan are: (a) Nested loop join, (b) Hash join, and (c) Merge join. For exa
          -&gt;  Seq Scan on users  (cost=0.00..14.00 rows=2 width=222)
                Filter: ((email)::text = 'jon@example.com'::text)
 </code></pre>
-
 <p>The hash join can be used only when the join condition is the equality operator.
 Postgres constructs an in-memory hash table of the filtered users and scans the
 orders table and retains those tuples which have a matching user id in the
