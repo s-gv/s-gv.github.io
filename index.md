@@ -1,7 +1,7 @@
 # Sagar Gubbi
 *[me@sagargv.com](mailto:me@sagargv.com)*
 
-I'm a postdoctoral researcher advised by [Partha Talukdar](https://research.google/people/ParthaTalukdar/) at Google Research. My current research is on helping novice users learn how to navigate the Android UI by leveraging large language models. In a previous life, I worked on low-power circuits and imitation learning for robots.
+I'm a postdoctoral researcher advised by [Partha Talukdar](https://research.google/people/ParthaTalukdar/) at Google Research. My current research is on helping novice users learn how to navigate the Android UI by leveraging large language models. In a previous life, I worked on low-power circuits and imitation learning for robots. Here is my [CV](/static/pdf/sagar_cv2.pdf).
 
 ## Projects
 - [Good Old Web](https://www.goodoldweb.com) is a collection of open-source, slim webapps that make very little use of javascript.
