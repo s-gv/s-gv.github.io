@@ -1,0 +1,28 @@
+name: Deploy to S3
+
+on:
+  push:
+    branches:
+      - main  # Triggers the workflow on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Download code from GitHub runner
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # Step 2: Authenticate with AWS
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    # Step 3: Sync files to S3 bucket
+    - name: Deploy to S3 Bucket
+      run: |
+        aws s3 sync . s3://${{ secrets.AWS_S3_BUCKET }} --delete
